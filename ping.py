@@ -3,6 +3,7 @@ import time
 import datetime
 from vars import *
 
+
 def is_server_up(host):
     command = ["ping", "-n", "1", host,]
     time.sleep(3)
@@ -21,17 +22,17 @@ def is_server_up(host):
             return True
         elif "unreachable" in output:
             return False
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         return False
 
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     while True:
-        for plant_box, plant_ips in plants.items():
+        for plant_source, plant_ips in plants.items():
             is_up = []
             for plant_ip in plant_ips:
                 is_up.append(is_server_up(f'{ip_prefix}{plant_ip}'))
             if all(is_up) is False:
-                print(datetime.datetime.now(), messages[plant_box])
+                print(datetime.datetime.now(), messages[plant_source])
                 continue
         time.sleep(10)
