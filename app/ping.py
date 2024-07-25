@@ -40,6 +40,6 @@ def ping_servers(plant_addresses):
 
 if __name__ == "__main__":
     while True:
-        ping_servers(vars.dispatcher_net_plants)
-        ping_servers(vars.local_net_plants)
+        ping_servers(vars.dispatcher_net)
+        ping_servers(vars.local_net)
         time.sleep(10)
