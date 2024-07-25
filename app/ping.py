@@ -6,7 +6,6 @@ import telegram
 
 def is_server_up(host):
     command = ["ping", "-n", "1", host,]
-    time.sleep(3)
     subprocess.run(
         ["chcp", "437"],
         shell=True,
@@ -26,20 +25,21 @@ def is_server_up(host):
         return False
 
 
-def ping_servers():
-    for plant_source, plant_ips in vars.plants.items():
+def ping_servers(plant_addresses):
+    for plant_source, plant_ips in plant_addresses.ip_addresses.items():
         are_servers_up = []
         for plant_ip in plant_ips*3:
-            server_up = is_server_up(f'{vars.ip_prefix}{plant_ip}')
+            server_up = is_server_up(f'{plant_addresses.ip_prefix}{plant_ip}')
             are_servers_up.append(server_up)
         if all(are_servers_up) is False:
             telegram.send_alarm_message(
-                f"Авария! {vars.al_prefix} {vars.messages[plant_source.lower()]}"
+                f"Авария! {vars.alarm_prefix} {vars.messages[plant_source.lower()]}"
                 )
             continue
 
 
 if __name__ == "__main__":
     while True:
-        ping_servers()
+        ping_servers(vars.dispatcher_net_plants)
+        ping_servers(vars.local_net_plants)
         time.sleep(10)
