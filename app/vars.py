@@ -4,21 +4,29 @@ import configparser
 config = configparser.ConfigParser()
 config.read("piconf.ini", "utf-8")
 
-ip_prefix = config["IP"]["IPPRF"]
+ip_prefix = config["IPS"]["IPPRF"]
 al_prefix = config["MESSAGES"]["PREFIX"]
+telegramtoken = config["TOKENS"]["TELEGRAMTOKEN"]
 
 plants = {
-    "RPV06": (config["IP"]["RPV06"].split(",")),
-    "RPV07": (config["IP"]["RPV07"].split(",")),
-    "RPV09": (config["IP"]["RPV09"].split(",")),
-    "RPV12": (config["IP"]["RPV12"].split(",")),
-    "RPV13": (config["IP"]["RPV13"].split(",")),
+    "RPV_06": (config["IPS"]["RPV_06"].split(",")),
+    "RPV_07": (config["IPS"]["RPV_07"].split(",")),
+    "RPV_09": (config["IPS"]["RPV_09"].split(",")),
+    "RPV_12": (config["IPS"]["RPV_12"].split(",")),
+    "RPV_13": (config["IPS"]["RPV_13"].split(",")),
 }
 
-messages = {
-    "RPV06": config["MESSAGES"]["RPV06"],
-    "RPV07": config["MESSAGES"]["RPV07"],
-    "RPV09": config["MESSAGES"]["RPV09"],
-    "RPV12": config["MESSAGES"]["RPV13"],
-    "RPV13": config["MESSAGES"]["RPV13"],
-}
+
+class IniSection(configparser.ConfigParser):
+    @property
+    def sections(self):
+        return self._sections
+
+
+config_users = IniSection()
+config_users.read("piconf.ini", "utf-8")
+
+parser = config_users["USERS"].parser
+users = parser.sections["USERS"]
+messages = parser.sections["MESSAGES"]
+
