@@ -33,7 +33,7 @@ def ping_servers():
             server_up = is_server_up(f'{vars.ip_prefix}{plant_ip}')
             are_servers_up.append(server_up)
         if all(are_servers_up) is False:
-            telegram.send_alarm(
+            telegram.send_alarm_message(
                 f"Авария! {vars.al_prefix} {vars.messages[plant_source.lower()]}"
                 )
             continue
