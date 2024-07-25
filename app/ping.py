@@ -4,8 +4,8 @@ import vars
 import telegram
 
 
-def is_server_up(host):
-    command = ["ping", "-n", "1", host,]
+def is_server_up(ip_addr):
+    command = ["ping", "-n", "1", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
         shell=True,
@@ -25,11 +25,11 @@ def is_server_up(host):
         return False
 
 
-def ping_servers(plant_addresses):
-    for plant_source, plant_ips in plant_addresses.ip_addresses.items():
+def ping_servers(ip):
+    for plant_source, hosts in ip.hosts.items():
         are_servers_up = []
-        for plant_ip in plant_ips*3:
-            server_up = is_server_up(f'{plant_addresses.ip_prefix}{plant_ip}')
+        for host in hosts*3:
+            server_up = is_server_up(f'{ip.net}{host}')
             are_servers_up.append(server_up)
         if all(are_servers_up) is False:
             telegram.send_alarm_message(

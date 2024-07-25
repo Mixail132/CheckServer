@@ -13,8 +13,8 @@ class PlantsIPs:
 local_net = PlantsIPs()
 dispatcher_net = PlantsIPs()
 
-local_net.ip_prefix = config["LOC_IPS"]["IP_PREFIX"]
-local_net.ip_addresses = {
+local_net.net = config["LOC_IPS"]["IP_PREFIX"]
+local_net.hosts = {
     "RPV_06": (config["LOC_IPS"]["RPV_06"].split(",")),
     "RPV_07": (config["LOC_IPS"]["RPV_07"].split(",")),
     "RPV_09": (config["LOC_IPS"]["RPV_09"].split(",")),
@@ -22,8 +22,8 @@ local_net.ip_addresses = {
     "RPV_13": (config["LOC_IPS"]["RPV_13"].split(",")),
 }
 
-dispatcher_net.ip_prefix = config["DIS_IPS"]["IP_PREFIX"]
-dispatcher_net.ip_addresses = {
+dispatcher_net.net = config["DIS_IPS"]["IP_PREFIX"]
+dispatcher_net.hosts = {
     "VRU_01": (config["DIS_IPS"]["VRU_01"].split(",")),
     "RPV_04": (config["DIS_IPS"]["RPV_04"].split(",")),
     "RPV_10": (config["DIS_IPS"]["RPV_10"].split(",")),
