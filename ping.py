@@ -1,7 +1,7 @@
 import subprocess
 import time
 import datetime
-from vars import *
+import vars
 
 
 def is_server_up(host):
@@ -26,13 +26,18 @@ def is_server_up(host):
         return False
 
 
+def ping_servers():
+    for plant_source, plant_ips in vars.plants.items():
+        is_up = []
+        for plant_ip in plant_ips:
+            _is_server_up = is_server_up(f'{vars.ip_prefix}{plant_ip}')
+            is_up.append(_is_server_up)
+        if all(is_up) is False:
+            print(datetime.datetime.now(), vars.messages[plant_source])
+            continue
+
+
 if __name__ == "__main__":
     while True:
-        for plant_source, plant_ips in plants.items():
-            is_up = []
-            for plant_ip in plant_ips:
-                is_up.append(is_server_up(f'{ip_prefix}{plant_ip}'))
-            if all(is_up) is False:
-                print(datetime.datetime.now(), messages[plant_source])
-                continue
+        ping_servers()
         time.sleep(10)
