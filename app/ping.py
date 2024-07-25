@@ -1,7 +1,7 @@
 import subprocess
 import time
-import datetime
 import vars
+import telegram
 
 
 def is_server_up(host):
@@ -28,17 +28,14 @@ def is_server_up(host):
 
 def ping_servers():
     for plant_source, plant_ips in vars.plants.items():
-        is_up = []
+        are_servers_up = []
         for plant_ip in plant_ips*3:
-            _is_server_up = is_server_up(f'{vars.ip_prefix}{plant_ip}')
-            is_up.append(_is_server_up)
-        if all(is_up) is False:
-            print(
-                datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
-                "Авария!\n",
-                vars.al_prefix,
-                vars.messages[plant_source]
-            )
+            server_up = is_server_up(f'{vars.ip_prefix}{plant_ip}')
+            are_servers_up.append(server_up)
+        if all(are_servers_up) is False:
+            telegram.send_alarm(
+                f"Авария! {vars.al_prefix} {vars.messages[plant_source.lower()]}"
+                )
             continue
 
 
