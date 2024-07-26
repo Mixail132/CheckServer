@@ -1,7 +1,7 @@
 import subprocess
+import telegram
 import time
 import vars
-import telegram
 
 
 def is_server_up(ip_addr):
@@ -17,15 +17,15 @@ def is_server_up(ip_addr):
             stderr=subprocess.STDOUT,
             encoding='cp866'
         )
-        if "TTL" in output:
-            return True
-        elif "unreachable" in output:
-            return False
     except subprocess.CalledProcessError:
         return False
 
+    if "TTL" in output:
+        return True
+    elif "unreachable" in output:
+        return False
 
-def ping_servers(ip):
+def ping_servers(ip: vars.PlantNet):
     for plant_source, hosts in ip.hosts.items():
         are_servers_up = []
         for host in hosts*3:
