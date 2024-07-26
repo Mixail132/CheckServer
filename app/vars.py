@@ -5,13 +5,18 @@ config = configparser.ConfigParser()
 config.read("piconf.ini", "utf-8")
 
 
-class PlantsIPs:
+class PlantNet:
+    hosts: dict
     ip_prefix: str
     ip_addresses: dict
+    net: str
+    source: str
+    alarm: bool
+    sent: bool
 
 
-local_net = PlantsIPs()
-dispatcher_net = PlantsIPs()
+local_net = PlantNet()
+dispatcher_net = PlantNet()
 
 local_net.net = config["LOC_IPS"]["IP_PREFIX"]
 local_net.hosts = {
