@@ -16,9 +16,7 @@ class IniSection(configparser.ConfigParser):
 config_sections = IniSection()
 config_sections.read("piconf.ini", "utf-8")
 
-parser = config_sections["USERS"].parser
-
-token = parser.section["TOKENS"]
+parser = config_sections["VARS"].parser
 
 
 class Plant:
@@ -33,7 +31,7 @@ class Plant:
 
 plants = Plant()
 
-plants.sources = [source for source in parser.section.keys() if "RPV" in source or "VRU" in source ]
+plants.sources = [source for source in parser.section.keys() if "RPV" in source or "VRU" in source]
 
 plants.hosts = {}
 for source in plants.sources:
@@ -44,11 +42,5 @@ for source in plants.sources:
     plants.messages[source] = parser.section["MESSAGES"][f"{source.lower()}"]
 
 
-
 plants.users = {user: tg_id for user, tg_id in parser.section["USERS"].items()}
 plants.tokens = {social_media: token for (social_media, token) in parser.section["TOKENS"].items()}
-
-
-
-
-
