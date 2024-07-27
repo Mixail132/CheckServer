@@ -1,5 +1,5 @@
 import telebot
-from vars import Plant
+from app.vars import Plant
 
 plants = Plant()
 telegramtoken = plants.tokens["telegramtoken"]
