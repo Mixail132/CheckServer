@@ -5,7 +5,7 @@ from vars import plants
 
 
 def is_server_up(ip_addr):
-    command = ["ping", "-n", "1", ip_addr,]
+    command = ["ping", "-n", "3", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
         shell=True,
@@ -28,10 +28,9 @@ def is_server_up(ip_addr):
 
 def ping_servers(vent_units):
     for shield, hosts in vent_units.hosts.items():
-        servers_up = []
-        for host in hosts:
-            server_up = is_server_up(host)
-            servers_up.append(server_up)
+        servers_up = [is_server_up(host) for host in hosts]
+        servers_up += [is_server_up(host) for host in hosts]
+        servers_up += [is_server_up(host) for host in hosts]
         if all(servers_up) is False:
             telegram.send_alarm_message(f"{vent_units.messages[shield]}")
             continue
