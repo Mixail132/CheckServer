@@ -31,9 +31,13 @@ def ping_servers(vent_units):
         servers_up = [is_server_up(host) for host in hosts]
         servers_up += [is_server_up(host) for host in hosts]
         servers_up += [is_server_up(host) for host in hosts]
-        if all(servers_up) is False:
+        if all(servers_up) is False and not vent_units.sendings[shield]:
             telegram.send_alarm_message(f"{vent_units.messages[shield]}")
-            continue
+            vent_units.sendings[shield] = True
+        elif all(servers_up) is True:
+            vent_units.sendings[shield] = False
+
+
 
 
 if __name__ == "__main__":
