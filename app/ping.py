@@ -1,7 +1,7 @@
 import subprocess
 import telegram
 import time
-from vars import plants
+from vars import Plant
 
 
 def is_server_up(ip_addr):
@@ -37,6 +37,7 @@ def ping_servers(vent_units):
 
 
 if __name__ == "__main__":
+    plants = Plant()
     while True:
         ping_servers(plants)
         time.sleep(10)
