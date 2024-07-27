@@ -26,13 +26,6 @@ plants = Plant()
 
 plants.sources = [source for source in parser.section.keys() if "RPV" in source or "VRU" in source]
 plants.users = {user: tg_id for user, tg_id in parser.section["USERS"].items()}
-plants.tokens = {social_media: token for (social_media, token) in parser.section["TOKENS"].items()}
-
-plants.hosts = {}
-for source in plants.sources:
-    plants.hosts[source] = parser.section[f"{source}"]
-
-plants.messages = {}
-for source in plants.sources:
-    plants.messages[source] = parser.section["MESSAGES"][f"{source.lower()}"]
-
+plants.tokens = {social_media: token for social_media, token in parser.section["TOKENS"].items()}
+plants.hosts = {source: parser.section[f"{source}"] for source in plants.sources}
+plants.messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in plants.sources}
