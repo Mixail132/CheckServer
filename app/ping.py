@@ -19,7 +19,6 @@ def is_server_up(ip_addr):
         )
     except subprocess.CalledProcessError:
         return False
-
     if "TTL" in output:
         return True
     elif "unreachable" in output:
@@ -28,14 +27,12 @@ def is_server_up(ip_addr):
 
 def ping_servers(vent_units):
     for shield, hosts in vent_units.hosts.items():
-        servers_up = [is_server_up(host) for host in hosts]
+        servers_up = [is_server_up(host) for host in hosts.values()]
         if all(servers_up) is False and not vent_units.sendings[shield]:
             telegram.send_alarm_message(f"{vent_units.messages[shield]}")
             vent_units.sendings[shield] = True
         elif all(servers_up) is True:
             vent_units.sendings[shield] = False
-
-
 
 
 if __name__ == "__main__":
