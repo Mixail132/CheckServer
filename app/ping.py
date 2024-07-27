@@ -1,11 +1,11 @@
 import subprocess
 import telegram
 import time
-import vars
+from vars import Plant
 
 
 def is_server_up(ip_addr):
-    command = ["ping", "-n", "1", ip_addr,]
+    command = ["ping", "-n", "3", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
         shell=True,
@@ -25,21 +25,23 @@ def is_server_up(ip_addr):
     elif "unreachable" in output:
         return False
 
-def ping_servers(ip: vars.PlantNet):
-    for plant_source, hosts in ip.hosts.items():
-        are_servers_up = []
-        for host in hosts*3:
-            server_up = is_server_up(f'{ip.net}{host}')
-            are_servers_up.append(server_up)
-        if all(are_servers_up) is False:
-            telegram.send_alarm_message(
-                f"Авария! {vars.alarm_prefix} {vars.messages[plant_source.lower()]}"
-                )
-            continue
+
+def ping_servers(vent_units):
+    for shield, hosts in vent_units.hosts.items():
+        servers_up = [is_server_up(host) for host in hosts]
+        servers_up += [is_server_up(host) for host in hosts]
+        servers_up += [is_server_up(host) for host in hosts]
+        if all(servers_up) is False and not vent_units.sendings[shield]:
+            telegram.send_alarm_message(f"{vent_units.messages[shield]}")
+            vent_units.sendings[shield] = True
+        elif all(servers_up) is True:
+            vent_units.sendings[shield] = False
+
+
 
 
 if __name__ == "__main__":
+    plants = Plant()
     while True:
-        ping_servers(vars.dispatcher_net)
-        ping_servers(vars.local_net)
+        ping_servers(plants)
         time.sleep(10)

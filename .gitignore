@@ -2,5 +2,5 @@
 venv
 .venv
 __pycache__
-app/piconf.ini
+app/vars.ini
 tasks.txt
