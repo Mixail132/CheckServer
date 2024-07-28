@@ -8,7 +8,7 @@ def is_server_up(ip_addr):
     command = ["ping", "-n", "3", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
-        shell=True,
+        shell=False,
         stdout=subprocess.DEVNULL,
     )
     try:
