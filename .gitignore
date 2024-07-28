@@ -4,3 +4,4 @@ venv
 __pycache__
 app/vars.ini
 tasks.txt
+db.xlsx
