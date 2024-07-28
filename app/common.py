@@ -41,7 +41,7 @@ def send_alarm_message(message_text):
         bot.send_message(user, message_text)
 
 
-def is_server_up(ip_addr):
+def is_server_out(ip_addr):
     command = ["ping", "-n", "2", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
@@ -56,25 +56,25 @@ def is_server_up(ip_addr):
             creationflags=subprocess.CREATE_NO_WINDOW
         )
     except subprocess.CalledProcessError:
-        return False
+        return True
 
     if "TTL" in output:
-        return True
-    elif "unreachable" in output:
         return False
+    elif "unreachable" in output:
+        return True
 
 
 def ping_servers(vent_units):
     for shield, hosts in vent_units.hosts.items():
 
-        servers_up = [is_server_up(host) for host in hosts.values()]
-        servers_up += [is_server_up(host) for host in hosts.values()]
+        servers_out = [is_server_out(host) for host in hosts.values()]
+        servers_out += [is_server_out(host) for host in hosts.values()]
 
-        if all(servers_up) is False and not vent_units.sendings[shield]:
+        if all(servers_out) and not vent_units.sendings[shield]:
             send_alarm_message(f"{vent_units.messages[shield]}")
             vent_units.sendings[shield] = True
 
-        elif all(servers_up) is True:
+        elif not all(servers_out):
             vent_units.sendings[shield] = False
 
 
