@@ -73,7 +73,6 @@ def ping_servers(vent_units):
         servers_out += [is_server_out(host) for host in hosts.values()]
 
         if None in servers_out:
-            send_alarm_message("Error occurs when pinging!")
             continue
 
         elif all(servers_out) and not vent_units.sendings[shield]:
