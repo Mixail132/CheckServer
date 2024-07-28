@@ -5,3 +5,4 @@ __pycache__
 app/vars.ini
 app/db.xlsx
 app/tasks.txt
+app/try.py
