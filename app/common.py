@@ -42,7 +42,7 @@ def send_alarm_message(message_text):
 
 
 def is_server_up(ip_addr):
-    command = ["ping", "-n", "3", ip_addr,]
+    command = ["ping", "-n", "2", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
         shell=True,
@@ -52,7 +52,8 @@ def is_server_up(ip_addr):
         output = subprocess.check_output(
             command,
             stderr=subprocess.STDOUT,
-            encoding='cp866'
+            encoding='cp866',
+            creationflags=subprocess.CREATE_NO_WINDOW
         )
     except subprocess.CalledProcessError:
         return False
@@ -65,9 +66,9 @@ def is_server_up(ip_addr):
 
 def ping_servers(vent_units):
     for shield, hosts in vent_units.hosts.items():
-        servers_up = []
-        for _ in range(3):
-            servers_up += [is_server_up(host) for host in hosts.values()]
+
+        servers_up = [is_server_up(host) for host in hosts.values()]
+        servers_up += [is_server_up(host) for host in hosts.values()]
 
         if all(servers_up) is False and not vent_units.sendings[shield]:
             send_alarm_message(f"{vent_units.messages[shield]}")
