@@ -32,6 +32,8 @@ class Plant:
 
 
 plants = Plant()
+
+
 telegramtoken = plants.tokens["telegramtoken"]
 bot = telebot.TeleBot(telegramtoken)
 
@@ -78,7 +80,6 @@ def ping_servers(vent_units):
             vent_units.sendings[shield] = False
 
 
-plants = Plant()
 while True:
     ping_servers(plants)
     time.sleep(30)

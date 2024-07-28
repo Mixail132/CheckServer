@@ -18,3 +18,6 @@ class Plant:
         self.hosts = {source: parser.section[f"{source}"] for source in self.sources}
         self.messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources}
         self.sendings = {source: False for source in self.sources}
+
+
+plants = Plant()

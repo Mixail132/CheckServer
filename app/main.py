@@ -1,7 +1,7 @@
 import subprocess
 import time
 from app.telegram import send_alarm_message
-from app.vars import Plant
+from app.vars import plants
 
 
 def is_server_out(ip_addr):
@@ -41,7 +41,6 @@ def ping_servers(vent_units):
             vent_units.sendings[shield] = False
 
 
-plants = Plant()
 while True:
     ping_servers(plants)
     time.sleep(30)
