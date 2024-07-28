@@ -58,7 +58,7 @@ def is_server_out(ip_addr):
             creationflags=subprocess.CREATE_NO_WINDOW
         )
     except subprocess.CalledProcessError:
-        return True
+        return None
 
     if "TTL" in output:
         return False
@@ -72,7 +72,11 @@ def ping_servers(vent_units):
         servers_out = [is_server_out(host) for host in hosts.values()]
         servers_out += [is_server_out(host) for host in hosts.values()]
 
-        if all(servers_out) and not vent_units.sendings[shield]:
+        if None in servers_out:
+            send_alarm_message("Error occurs when pinging!")
+            continue
+
+        elif all(servers_out) and not vent_units.sendings[shield]:
             send_alarm_message(f"{vent_units.messages[shield]}")
             vent_units.sendings[shield] = True
 
