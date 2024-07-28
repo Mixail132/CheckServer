@@ -23,7 +23,7 @@ def glue_scripts(script_1, script_2, script_3, output_script):
 
 
 if __name__ == "__main__":
-    file_1, file_2, file_3 = "vars.py", "telegram.py", "ping.py"
+    file_1, file_2, file_3 = "vars.py", "telegram.py", "main.py"
     output_file = "common.py"
     glue_scripts(file_1, file_2, file_3, output_file)
     subprocess.run(["autopep8", "--in-place", "--aggressive", output_file])
