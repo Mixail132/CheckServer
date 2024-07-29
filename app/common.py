@@ -18,9 +18,9 @@ class Plant:
         parser = config_sections["VARS"].parser
         self.sources = [source for source in parser.section.keys(
         ) if "RPV" in source or "VRU" in source]
-        self.users = {
+        self.telegram_users = {
             user: tg_id for user,
-            tg_id in parser.section["USERS"].items()}
+            tg_id in parser.section["TELEGRAM_USERS"].items()}
         self.tokens = {
             social_media: token for social_media,
             token in parser.section["TOKENS"].items()}
@@ -39,7 +39,7 @@ bot = telebot.TeleBot(telegramtoken)
 
 
 def send_alarm_message(message_text):
-    for user in plants.users.values():
+    for user in plants.telegram_users.values():
         bot.send_message(user, message_text)
 
 
