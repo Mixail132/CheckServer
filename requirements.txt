@@ -31,3 +31,5 @@ urllib3==2.2.2
 whichcraft==0.6.1
 zope.event==5.0
 zope.interface==6.4.post2
+
+viberbot~=1.0.12
