@@ -1,6 +1,6 @@
 import subprocess
 import time
-from app.telegram import send_alarm_message
+from app.telegram import send_telegram_message
 from app.vars import plants
 
 
@@ -37,7 +37,7 @@ def ping_servers(vent_units):
             continue
 
         elif all(servers_out) and not vent_units.sendings[shield]:
-            send_alarm_message(f"{vent_units.messages[shield]}")
+            send_telegram_message(f"{vent_units.messages[shield]}")
             vent_units.sendings[shield] = True
 
         elif not all(servers_out):
