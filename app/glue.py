@@ -1,11 +1,12 @@
 import subprocess
 
 
-def glue_scripts(script_1, script_2, script_3, output_script, file):
+def glue_scripts(script_1, script_2, script_3, script_4,  output_script):
 
     with (open(script_1, "r") as s1,
           open(script_2, "r") as s2,
           open(script_3, "r") as s3,
+          open(script_4, "r") as s4,
           open(output_script, "w") as out):
 
         for line in s1:
@@ -21,6 +22,11 @@ def glue_scripts(script_1, script_2, script_3, output_script, file):
         out.write("\n\n")
 
         for line in s3:
+            if "app." in line:
+                continue
+            out.write(line)
+
+        for line in s4:
             if "app." in line:
                 continue
             out.write(line)
