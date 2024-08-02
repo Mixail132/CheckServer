@@ -14,6 +14,8 @@ class Plant:
         parser = config_sections["VARS"].parser
         self.sources = [source for source in parser.section.keys() if "RPV" in source or "VRU" in source]
         self.telegram_users = {user: tg_id for user, tg_id in parser.section["TELEGRAM_USERS"].items()}
+        self.viber_users = {user: tg_id for user, tg_id in parser.section["VIBER_USERS"].items()}
+        self.viber_configs = {par_name: par_value for par_name, par_value in parser.section["VIBER_CONFIGS"].items()}
         self.tokens = {social_media: token for social_media, token in parser.section["TOKENS"].items()}
         self.hosts = {source: parser.section[f"{source}"] for source in self.sources}
         self.messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources}
