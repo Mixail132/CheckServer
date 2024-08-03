@@ -1,7 +1,7 @@
 import telebot
 from app.vars import plants
 
-telegramtoken = plants.tokens["telegramtoken"]
+telegramtoken = plants.tokens["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
 
 def send_telegram_message(message_text):

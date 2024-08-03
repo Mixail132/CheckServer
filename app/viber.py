@@ -3,7 +3,7 @@ from app.vars import plants
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
-vibertoken = plants.tokens["vibertoken"]
+vibertoken = plants.tokens["VIBERTOKEN"]
 viberavatar = plants.viber_configs["BOT_AVATAR"]
 vibername = plants.viber_configs["BOT_NAME"]
 

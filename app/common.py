@@ -19,30 +19,36 @@ class Plant:
         config_sections = IniSection()
         config_sections.read("vars.ini", "utf-8")
         parser = config_sections["VARS"].parser
-        self.sources = [source for source in parser.section.keys(
-        ) if "RPV" in source or "VRU" in source]
+        self.sources = [
+            source for source in parser.section.keys() if "RPV" in source or "VRU" in source
+        ]
         self.telegram_users = {
-            user: tg_id for user,
-            tg_id in parser.section["TELEGRAM_USERS"].items()}
-        self.viber_users = {user: tg_id for user,
-                            tg_id in parser.section["VIBER_USERS"].items()}
+            user: tg_id for user, tg_id in parser.section["TELEGRAM_USERS"].items()
+        }
+        self.viber_users = {
+            user: tg_id for user, tg_id in parser.section["VIBER_USERS"].items()
+        }
         self.viber_configs = {
-            par_name: par_value for par_name,
-            par_value in parser.section["VIBER_CONFIGS"].items()}
+            par_name.upper(): par_value for par_name, par_value in parser.section["VIBER_CONFIGS"].items()
+        }
         self.tokens = {
-            social_media: token for social_media,
-            token in parser.section["TOKENS"].items()}
+            token_name.upper(): token_value for token_name, token_value in parser.section["TOKENS"].items()
+        }
         self.hosts = {
-            source: parser.section[f"{source}"] for source in self.sources}
+            source: parser.section[f"{source}"] for source in self.sources
+        }
         self.messages = {
-            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources}
-        self.sendings = {source: False for source in self.sources}
+            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources
+        }
+        self.sendings = {
+            source: False for source in self.sources
+        }
 
 
 plants = Plant()
 
 
-telegramtoken = plants.tokens["telegramtoken"]
+telegramtoken = plants.tokens["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
 
 
@@ -51,7 +57,7 @@ def send_telegram_message(message_text):
         bot.send_message(user, message_text)
 
 
-vibertoken = plants.tokens["vibertoken"]
+vibertoken = plants.tokens["VIBERTOKEN"]
 viberavatar = plants.viber_configs["BOT_AVATAR"]
 vibername = plants.viber_configs["BOT_NAME"]
 
