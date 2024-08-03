@@ -7,4 +7,4 @@ app/db.xlsx
 app/tasks.txt
 app/try.py
 app/logo.jpg
-common.exe
+app/*.exe
