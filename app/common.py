@@ -103,7 +103,7 @@ def is_server_out(ip_addr):
             creationflags=subprocess.CREATE_NO_WINDOW
         )
     except subprocess.CalledProcessError:
-        return None
+        return True
 
     if "TTL" in output:
         return False
