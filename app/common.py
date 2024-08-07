@@ -88,7 +88,7 @@ def send_viber_message(alarm_message):
                 continue
 
 
-def is_server_out(ip_addr):
+def ping_server(ip_addr):
     command = ["ping", "-n", "2", ip_addr,]
     subprocess.run(
         ["chcp", "437"],
@@ -107,15 +107,15 @@ def is_server_out(ip_addr):
 
     if "TTL" in output:
         return False
-    elif "unreachable" in output:
+    elif "100%" in output:
         return True
 
 
-def ping_servers(vent_units):
+def is_server_out(vent_units):
     for shield, hosts in vent_units.hosts.items():
 
-        servers_out = [is_server_out(host) for host in hosts.values()]
-        servers_out += [is_server_out(host) for host in hosts.values()]
+        servers_out = [ping_server(host) for host in hosts.values()]
+        servers_out += [ping_server(host) for host in hosts.values()]
 
         if None in servers_out:
             continue
@@ -131,5 +131,5 @@ def ping_servers(vent_units):
 
 
 while True:
-    ping_servers(plants)
+    is_server_out(plants)
     time.sleep(30)
