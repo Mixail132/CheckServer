@@ -3,6 +3,9 @@ import subprocess
 import time
 
 import telebot
+from viberbot import Api
+from viberbot.api.bot_configuration import BotConfiguration
+from viberbot.api.messages.text_message import TextMessage
 
 
 class IniSection(configparser.ConfigParser):
@@ -16,31 +19,73 @@ class Plant:
         config_sections = IniSection()
         config_sections.read("vars.ini", "utf-8")
         parser = config_sections["VARS"].parser
-        self.sources = [source for source in parser.section.keys(
-        ) if "RPV" in source or "VRU" in source]
+        self.sources = [
+            source for source in parser.section.keys() if "RPV" in source or "VRU" in source
+        ]
         self.telegram_users = {
-            user: tg_id for user,
-            tg_id in parser.section["TELEGRAM_USERS"].items()}
+            user: tg_id for user, tg_id in parser.section["TELEGRAM_USERS"].items()
+        }
+        self.viber_users = {
+            user: tg_id for user, tg_id in parser.section["VIBER_USERS"].items()
+        }
+        self.viber_configs = {
+            par_name.upper(): par_value for par_name, par_value in parser.section["VIBER_CONFIGS"].items()
+        }
         self.tokens = {
-            social_media: token for social_media,
-            token in parser.section["TOKENS"].items()}
+            token_name.upper(): token_value for token_name, token_value in parser.section["TOKENS"].items()
+        }
         self.hosts = {
-            source: parser.section[f"{source}"] for source in self.sources}
+            source: parser.section[f"{source}"] for source in self.sources
+        }
         self.messages = {
-            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources}
-        self.sendings = {source: False for source in self.sources}
+            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources
+        }
+        self.sendings = {
+            source: False for source in self.sources
+        }
 
 
 plants = Plant()
 
 
-telegramtoken = plants.tokens["telegramtoken"]
+telegramtoken = plants.tokens["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
 
 
-def send_alarm_message(message_text):
+def send_telegram_message(message_text):
     for user in plants.telegram_users.values():
         bot.send_message(user, message_text)
+
+
+vibertoken = plants.tokens["VIBERTOKEN"]
+viberavatar = plants.viber_configs["BOT_AVATAR"]
+vibername = plants.viber_configs["BOT_NAME"]
+
+bot_config = BotConfiguration(
+    name=vibername,
+    avatar=viberavatar,
+    auth_token=vibertoken
+)
+
+viber = Api(bot_config)
+
+
+def send_viber_message(alarm_message):
+    alarm_msg = TextMessage(text=alarm_message)
+    for user_id in plants.viber_users.values():
+        try:
+            viber.send_messages(user_id, [alarm_msg])
+        except Exception as ex:
+            if "notSubscribed" in ex.args[0]:
+                recipients = {
+                    name: chat_id for chat_id,
+                    name in plants.viber_users.items()}
+                bot_admin = plants.viber_users["admin"]
+                byby_message = f"{recipients[user_id]} has left this chat."
+                byby_msg = TextMessage(text=byby_message)
+                viber.send_messages(bot_admin, [byby_msg])
+                del recipients, bot_admin
+                continue
 
 
 def is_server_out(ip_addr):
@@ -58,7 +103,7 @@ def is_server_out(ip_addr):
             creationflags=subprocess.CREATE_NO_WINDOW
         )
     except subprocess.CalledProcessError:
-        return None
+        return True
 
     if "TTL" in output:
         return False
@@ -76,7 +121,9 @@ def ping_servers(vent_units):
             continue
 
         elif all(servers_out) and not vent_units.sendings[shield]:
-            send_alarm_message(f"{vent_units.messages[shield]}")
+            alarm_message_text = vent_units.messages[shield]
+            send_telegram_message(alarm_message_text)
+            send_viber_message(alarm_message_text)
             vent_units.sendings[shield] = True
 
         elif not all(servers_out):
