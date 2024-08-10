@@ -3,8 +3,10 @@ venv
 .venv
 __pycache__
 app/vars.ini
+app_v2/vars_.ini
 app/db.xlsx
 app/tasks.txt
 app/try.py
 app/logo.jpg
+app_мv2/logo_.jpg
 app/*.exe
