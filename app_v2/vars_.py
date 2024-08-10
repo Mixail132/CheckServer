@@ -28,3 +28,5 @@ class Vars:
         self.messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.hosts}
         self.sendings = {source: False for source in self.hosts}
 
+
+allvars = Vars()

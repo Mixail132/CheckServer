@@ -1,7 +1,7 @@
 import subprocess
 from app_v2.telegram_ import send_telegram_message
 from app_v2.viber_ import send_viber_message
-from app_v2.vars_ import Vars
+from app_v2.vars_ import Vars, allvars
 
 
 class AuditShields:
@@ -64,7 +64,6 @@ class AuditShields:
             send_viber_message(text)
 
 
-allvars = Vars()
 auditor = AuditShields(allvars)
 
 while True:
