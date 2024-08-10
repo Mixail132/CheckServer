@@ -14,34 +14,17 @@ class Vars:
         parser = configs["VARS"].parser
         headers = parser.sections()
 
-        lan_sources = [source for source in headers if "DLAN" in source]
-        wifi_sources = [source for source in headers if "WIFI" in source]
-        self.lan_hosts = {source: parser.section[f"{source}"] for source in lan_sources}
-        self.wifi_hosts = {source: parser.section[f"{source}"] for source in wifi_sources}
+        sources = []
+        for net_type in ["WIFI", "DLAN", "INET"]:
+            sources += [source for source in headers if net_type in source]
+        self.hosts = {source: parser.section[f"{source}"] for source in sources}
 
-        self.telegram_users = {
-            user: tid for user, tid in parser.section["TELEGRAM_USERS"].items()
-        }
+        self.telegram_users = {user: tid for user, tid in parser.section["TELEGRAM_USERS"].items()}
+        self.viber_users = {user: vid for user, vid in parser.section["VIBER_USERS"].items()}
 
-        self.viber_users = {
-            user: vid for user, vid in parser.section["VIBER_USERS"].items()
-        }
+        self.viber_configs = {par.upper(): value for par, value in parser.section["VIBER_CONFIGS"].items()}
+        self.telegram_configs = {par.upper(): value for par, value in parser.section["TELEGRAM_CONFIGS"].items()}
 
-        self.viber_configs = {
-         par.upper(): value for par, value in parser.section["VIBER_CONFIGS"].items()
-        }
+        self.messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.hosts}
+        self.sendings = {source: False for source in self.hosts}
 
-        self.telegram_configs = {
-            par.upper(): value for par, value in parser.section["TELEGRAM_CONFIGS"].items()
-        }
-
-        all_sources = {**self.lan_hosts, **self.wifi_hosts}
-        self.messages = {
-            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in all_sources
-        }
-
-        self.sendings = {source: False for source in all_sources}
-
-
-allvars = Vars()
-...
