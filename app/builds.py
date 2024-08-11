@@ -1,4 +1,4 @@
-from dirs import DIR_ROOT, DIR_APP
+from dirs import DIR_ROOT, DIR_APP, DIR_TEMP
 import subprocess
 
 
@@ -59,6 +59,14 @@ if __name__ == "__main__":
             "--windowed",
             "--icon",
             DIR_ROOT / "static" / "ico.ico",
-            DIR_APP / "common.py",
+            "--name",
+            "VentChecker",
+            DIR_APP / "commons.py",
+            "--distpath",
+            DIR_APP,
+            "--workpath",
+            DIR_TEMP / "build",
+            "--specpath",
+            DIR_TEMP
         ]
     )
