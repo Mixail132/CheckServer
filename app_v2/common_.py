@@ -1,6 +1,5 @@
 import configparser
 import subprocess
-import time
 
 import telebot
 from viberbot import Api
@@ -14,52 +13,50 @@ class IniSection(configparser.ConfigParser):
         return self._sections
 
 
-class Plant:
+class Vars:
     def __init__(self):
-        config_sections = IniSection()
-        config_sections.read("vars.ini", "utf-8")
-        parser = config_sections["VARS"].parser
-        self.sources = [
-            source for source in parser.section.keys() if "RPV" in source or "VRU" in source
-        ]
-        self.telegram_users = {
-            user: tg_id for user, tg_id in parser.section["TELEGRAM_USERS"].items()
-        }
-        self.viber_users = {
-            user: tg_id for user, tg_id in parser.section["VIBER_USERS"].items()
-        }
-        self.viber_configs = {
-            par_name.upper(): par_value for par_name, par_value in parser.section["VIBER_CONFIGS"].items()
-        }
-        self.tokens = {
-            token_name.upper(): token_value for token_name, token_value in parser.section["TOKENS"].items()
-        }
+        configs = IniSection()
+        configs.read("vars_.ini", "utf-8")
+        parser = configs["VARS"].parser
+        headers = parser.sections()
+
+        sources = []
+        for net_type in ["WIFI", "DLAN", "INET"]:
+            sources += [source for source in headers if net_type in source]
         self.hosts = {
-            source: parser.section[f"{source}"] for source in self.sources
-        }
+            source: parser.section[f"{source}"] for source in sources}
+
+        self.telegram_users = {user: tid for user,
+                               tid in parser.section["TELEGRAM_USERS"].items()}
+        self.viber_users = {user: vid for user,
+                            vid in parser.section["VIBER_USERS"].items()}
+
+        self.viber_configs = {par.upper(): value for par,
+                              value in parser.section["VIBER_CONFIGS"].items()}
+        self.telegram_configs = {
+            par.upper(): value for par,
+            value in parser.section["TELEGRAM_CONFIGS"].items()}
+
         self.messages = {
-            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.sources
-        }
-        self.sendings = {
-            source: False for source in self.sources
-        }
+            source: parser.section["MESSAGES"][f"{source.lower()}"] for source in self.hosts}
+        self.sendings = {source: False for source in self.hosts}
 
 
-plants = Plant()
+allvars = Vars()
 
 
-telegramtoken = plants.tokens["TELEGRAMTOKEN"]
+telegramtoken = allvars.telegram_configs["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
 
 
 def send_telegram_message(message_text):
-    for user in plants.telegram_users.values():
+    for user in allvars.telegram_users.values():
         bot.send_message(user, message_text)
 
 
-vibertoken = plants.tokens["VIBERTOKEN"]
-viberavatar = plants.viber_configs["BOT_AVATAR"]
-vibername = plants.viber_configs["BOT_NAME"]
+vibertoken = allvars.viber_configs["VIBERTOKEN"]
+viberavatar = allvars.viber_configs["BOT_AVATAR"]
+vibername = allvars.viber_configs["BOT_NAME"]
 
 bot_config = BotConfiguration(
     name=vibername,
@@ -72,15 +69,15 @@ viber = Api(bot_config)
 
 def send_viber_message(alarm_message):
     alarm_msg = TextMessage(text=alarm_message)
-    for user_id in plants.viber_users.values():
+    for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
         except Exception as ex:
             if "notSubscribed" in ex.args[0]:
                 recipients = {
                     name: chat_id for chat_id,
-                    name in plants.viber_users.items()}
-                bot_admin = plants.viber_users["admin"]
+                    name in allvars.viber_users.items()}
+                bot_admin = allvars.viber_users["admin"]
                 byby_message = f"{recipients[user_id]} has left this chat."
                 byby_msg = TextMessage(text=byby_message)
                 viber.send_messages(bot_admin, [byby_msg])
@@ -88,48 +85,72 @@ def send_viber_message(alarm_message):
                 continue
 
 
-def ping_server(ip_addr):
-    command = ["ping", "-n", "2", ip_addr,]
-    subprocess.run(
-        ["chcp", "437"],
-        shell=True,
-        stdout=subprocess.DEVNULL,
-    )
-    try:
-        output = subprocess.check_output(
-            command,
-            stderr=subprocess.STDOUT,
-            encoding='cp866',
-            creationflags=subprocess.CREATE_NO_WINDOW
-        )
-    except subprocess.CalledProcessError:
-        return True
+class AuditShields:
 
-    if "TTL" in output:
-        return False
-    elif "100%" in output:
-        return True
+    def __init__(self, config_vars: Vars) -> None:
+        self.vars = config_vars
+        self.shields_out = {}
+        self.messages_sent = {}
+
+    @staticmethod
+    def ping_host(ip_address: str) -> bool:
+        """ Checks a single host if it's up or out """
+        command = ["ping", "-n", "1", ip_address, ]
+        subprocess.run(["chcp", "437"], shell=True,
+                       stdout=subprocess.DEVNULL, )
+        try:
+            output = subprocess.check_output(
+                command,
+                stderr=subprocess.STDOUT,
+                encoding='cp866',
+                creationflags=subprocess.CREATE_NO_WINDOW
+            )
+        except subprocess.CalledProcessError as err:
+            output = err.output
+
+        if "TTL" in output:
+            return False
+        elif "100%" in output:
+            return True
+
+    def is_network_out(self, network: str) -> bool:
+        """ Checks an always working host to make sure its network works """
+        checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["in_touch"]
+        is_out = self.ping_host(checking_host_ip)
+        return is_out
+
+    def check_shields(self, network: str) -> dict:
+        for shield, hosts in self.vars.hosts.items():
+            if network in shield and "SOURCE" not in shield:
+                hosts_out = [self.ping_host(host) for host in hosts.values()]
+                self.shields_out.update({shield: all(hosts_out)})
+        return self.shields_out
+
+    def form_alarm_message(self) -> str:
+        """ Composes an alarm message text regarding the certain equipment alarm """
+        message_text = ""
+        for shield, status in self.shields_out.items():
+            if not status:
+                continue
+            if not self.vars.sendings[shield]:
+                self.vars.sendings[shield] = True
+                message_text += f"{self.vars.messages[shield]} \n"
+        return message_text
+
+    @staticmethod
+    def send_alarm_message(text: str) -> None:
+        """ Sends the alarm message to proper Telegram and Viber users """
+        if text:
+            text = f"Alarm!\n{text}"
+            send_telegram_message(text)
+            send_viber_message(text)
 
 
-def is_server_out(vent_units):
-    for shield, hosts in vent_units.hosts.items():
-
-        servers_out = [ping_server(host) for host in hosts.values()]
-        servers_out += [ping_server(host) for host in hosts.values()]
-
-        if None in servers_out:
-            continue
-
-        elif all(servers_out) and not vent_units.sendings[shield]:
-            alarm_message_text = vent_units.messages[shield]
-            send_telegram_message(alarm_message_text)
-            send_viber_message(alarm_message_text)
-            vent_units.sendings[shield] = True
-
-        elif not all(servers_out):
-            vent_units.sendings[shield] = False
-
+auditor = AuditShields(allvars)
 
 while True:
-    is_server_out(plants)
-    time.sleep(30)
+    for net in ["WIFI", "DLAN"]:
+        if auditor.is_network_out(net):
+            auditor.check_shields(net)
+    message = auditor.form_alarm_message()
+    auditor.send_alarm_message(message)
