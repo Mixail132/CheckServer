@@ -149,7 +149,7 @@ class AuditShields:
 auditor = AuditShields(allvars)
 
 while True:
-    for net in ["WIFI", "DLAN"]:
+    for net in ["WIFI", "DLAN", "INET"]:
         if auditor.is_network_out(net):
             auditor.check_shields(net)
     message = auditor.form_alarm_message()
