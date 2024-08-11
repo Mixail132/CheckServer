@@ -36,6 +36,4 @@ class Vars:
         }
 
 
-plants = Vars()
-for k in plants.checkers:
-    print(k)
+allvars = Vars()
