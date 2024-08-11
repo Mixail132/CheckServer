@@ -9,35 +9,14 @@ def glue_scripts(script_1, script_2, script_3, script_4,  output_script):
           open(script_4, "r") as s4,
           open(output_script, "w") as out):
 
-        for line in s1:
-            if "app_v2." in line:
-                continue
-            elif "if __name__" in line:
-                break
-            out.write(line)
-        out.write("\n\n")
-
-        for line in s2:
-            if "app_v2." in line:
-                continue
-            elif "if __name__" in line:
-                break
-            out.write(line)
-        out.write("\n\n")
-
-        for line in s3:
-            if "app_v2." in line:
-                continue
-            elif "if __name__" in line:
-                break
-            out.write(line)
-
-        for line in s4:
-            if "app_v2." in line:
-                continue
-            elif "if __name__" in line:
-                break
-            out.write(line)
+        for script in [s1, s2, s3, s4]:
+            for line in script:
+                if "app_v2." in line:
+                    continue
+                elif "__name__" in line:
+                    break
+                out.write(line)
+            out.write("\n\n")
 
 
 if __name__ == "__main__":
@@ -63,4 +42,10 @@ if __name__ == "__main__":
          output_file
         ]
     )
-    subprocess.run(["isort", output_file])
+
+    subprocess.run(
+        [
+         "isort",
+         output_file
+        ]
+    )
