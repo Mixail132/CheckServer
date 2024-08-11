@@ -4,9 +4,9 @@ venv
 __pycache__
 app/vars.ini
 app_v2/vars_.ini
+app_v2/logo.jpg
 db.xlsx
 tasks.txt
 app/try.py
 app/logo.jpg
-app_мv2/logo_.jpg
 app/*.exe
