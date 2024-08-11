@@ -5,13 +5,10 @@ __pycache__
 venv
 
 app/vars.ini
-app/logo.jpg
-app/*.exe
 
-app_v2/vars_.ini
-app_v2/logo.jpg
-app_v2/*.exe
+static/db.xlsx
+static/logo.jpg
 
-db.xlsx
-tasks.txt
+static/tasks.txt
 try.py
+
