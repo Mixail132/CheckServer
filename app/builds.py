@@ -1,8 +1,6 @@
-from pathlib import Path
+from dirs import DIR_ROOT, DIR_APP
 import subprocess
 
-DIR_ROOT = Path(__file__).parent.resolve()
-DIR_APP = DIR_ROOT / "app"
 
 def glue_scripts(script_1, script_2, script_3, script_4,  output_script):
 
@@ -50,5 +48,17 @@ if __name__ == "__main__":
         [
          "isort",
          output_file
+        ]
+    )
+
+    subprocess.run(
+        [
+            "pyinstaller",
+            "--noconfirm",
+            "--onefile",
+            "--windowed",
+            "--icon",
+            DIR_ROOT / "static" / "ico.ico",
+            DIR_APP / "common.py",
         ]
     )
