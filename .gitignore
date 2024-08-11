@@ -6,6 +6,7 @@ venv
 temp
 
 app/vars.ini
+app/commons.py
 
 static/db.xlsx
 static/logo.jpg
