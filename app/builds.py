@@ -60,7 +60,7 @@ if __name__ == "__main__":
             "--icon",
             DIR_ROOT / "static" / "ico.ico",
             "--name",
-            "VentChecker",
+            "CheckServer",
             DIR_APP / "commons.py",
             "--distpath",
             DIR_APP,
