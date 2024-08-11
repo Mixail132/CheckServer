@@ -3,15 +3,14 @@ __pycache__
 .idea
 .venv
 venv
+temp
 
 app/vars.ini
-app/logo.jpg
-app/*.exe
+app/commons.py
 
-app_v2/vars_.ini
-app_v2/logo.jpg
-app_v2/*.exe
+static/db.xlsx
+static/logo.jpg
+static/tasks.txt
 
-db.xlsx
-tasks.txt
 try.py
+
