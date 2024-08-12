@@ -19,7 +19,7 @@ def glue_scripts(
           open(script_2, "r", encoding="utf-8") as s2,
           open(script_3, "r", encoding="utf-8") as s3,
           open(script_4, "r", encoding="utf-8") as s4,
-          open(output_script, "w") as out):
+          open(output_script, "w", encoding="utf-8") as out):
 
         for script in [s1, s2, s3, s4]:
             for line in script:
