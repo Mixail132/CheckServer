@@ -4,11 +4,11 @@ from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
-from app.vars import DIR_STATIC, allvars
+from app.vars import  allvars
 
 vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
-viberavatar = DIR_STATIC / "logo.jpg"
+viberavatar = "logo.jpg"
 
 bot_config = BotConfiguration(
     name=vibername,
@@ -26,7 +26,7 @@ def send_viber_message(alarm_message: str) -> None:
     for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
-        except Exception as ex:
+        except Exception as ex: # noqa W0718 viberbot only has bare exception
             if "notSubscribed" in ex.args[0]:
                 recipients = {name: chat_id for chat_id, name in allvars.viber_users.items()}
                 bot_admin = allvars.viber_users["admin"]
