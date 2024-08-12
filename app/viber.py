@@ -1,12 +1,12 @@
 from app.vars import allvars
-from dirs import DIR_ROOT
+from vars import DIR_STATIC
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
 vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
-viberavatar = DIR_ROOT / "statics" / "logo.jpg"
+viberavatar = DIR_STATIC / "logo.jpg"
 
 bot_config = BotConfiguration(
     name=vibername,

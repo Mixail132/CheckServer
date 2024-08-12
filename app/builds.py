@@ -1,4 +1,4 @@
-from dirs import DIR_ROOT, DIR_APP, DIR_TEMP
+from vars import DIR_APP, DIR_TEMP, DIR_STATIC
 import subprocess
 from pathlib import Path
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             "--onefile",
             "--windowed",
             "--icon",
-            DIR_ROOT / "static" / "ico.ico",
+            DIR_STATIC / "ico.ico",
             "--name",
             "CheckServer",
             DIR_APP / "commons.py",
