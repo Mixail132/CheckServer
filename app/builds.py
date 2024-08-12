@@ -1,6 +1,7 @@
-from vars import DIR_APP, DIR_TEMP, DIR_STATIC
 import subprocess
+
 from pathlib import Path
+from vars import DIR_APP, DIR_TEMP, DIR_STATIC
 
 
 def glue_scripts(

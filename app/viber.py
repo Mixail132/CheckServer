@@ -1,5 +1,6 @@
 from app.vars import allvars
-from vars import DIR_STATIC
+from app.vars import DIR_STATIC
+
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
