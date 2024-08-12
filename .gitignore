@@ -8,9 +8,11 @@ temp
 app/vars.ini
 app/commons.py
 app/logo.jpg
+app/try.py
 
 static/db.xlsx
 static/tasks.txt
 static/errors
-app/try.py
+static/logo.jpg
+
 
