@@ -1,3 +1,5 @@
+""" Sending the message to the Viberbot users. """
+
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage

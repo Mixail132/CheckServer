@@ -1,3 +1,4 @@
+""" Picking the variables from 'ini' configure file. """
 import configparser
 from pathlib import Path
 

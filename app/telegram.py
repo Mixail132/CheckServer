@@ -1,3 +1,5 @@
+""" Sending the message to the Telegram users. """
+
 import telebot
 
 from app.vars import allvars

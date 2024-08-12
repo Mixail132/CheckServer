@@ -1,3 +1,5 @@
+""" Executing the main logic of the app. """
+
 import subprocess
 
 from app.telegram import send_telegram_message

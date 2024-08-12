@@ -1,3 +1,5 @@
+""" Actions for building the output 'exe' file. """
+
 import subprocess
 from pathlib import Path
 
@@ -20,9 +22,11 @@ def glue_scripts(
 
         for script in [s1, s2, s3, s4]:
             for line in script:
-                if "app." in line:
+                if 'app.' in line:
                     continue
-                elif "__name__" in line:
+                elif '"""' in line:
+                    continue
+                elif '__name__' in line:
                     break
                 out.write(line)
             out.write("\n\n")
