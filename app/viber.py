@@ -8,7 +8,7 @@ from app.vars import allvars
 
 vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
-viberavatar = allvars.viber_avatar["VIBER_AVATAR"]
+viberavatar = allvars.viber_configs["VIBER_AVATAR"]
 
 bot_config = BotConfiguration(
     name=vibername,
@@ -26,7 +26,8 @@ def send_viber_message(alarm_message: str) -> None:
     for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
-        except Exception as ex:  # noqa: W0718
+        # pylint: disable=W0718
+        except Exception as ex:
             if "notSubscribed" in ex.args[0]:
                 recipients = {name: chat_id for chat_id, name in allvars.viber_users.items()}
                 bot_admin = allvars.viber_users["admin"]
