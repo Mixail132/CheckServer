@@ -12,6 +12,7 @@ class IniSection(configparser.ConfigParser):
     """ Makes the builtin method to be returned. """
     @property
     def section(self):
+        """ Returns the builtin method. """
         return self._sections
 
 
