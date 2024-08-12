@@ -1,8 +1,11 @@
 import telebot
+
 from app.vars import allvars
+
 
 telegramtoken = allvars.telegram_configs["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
+
 
 def send_telegram_message(message_text: str) -> None:
     for user in allvars.telegram_users.values():
