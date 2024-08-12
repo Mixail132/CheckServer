@@ -15,6 +15,8 @@ class IniSection(configparser.ConfigParser):
 
 
 class Vars:
+    """ Keeps all the configuration variables. """
+
     def __init__(self) -> None:
         """ Reads the config file and matches its variables. """
 

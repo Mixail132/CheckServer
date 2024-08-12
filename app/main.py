@@ -8,7 +8,7 @@ from app.viber import send_viber_message
 
 
 class AuditShields:
-
+    """ Processes and keeps a state of the checked power shields. """
     def __init__(self, config_vars: Vars) -> None:
         self.vars = config_vars
         self.shields_out = {}
@@ -46,6 +46,7 @@ class AuditShields:
         return is_out
 
     def check_shields(self, network: str) -> dict:
+        """ Checks if a power shield is on. """
         for shield, hosts in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
                 hosts_out = [self.ping_host(host) for host in hosts.values()]
