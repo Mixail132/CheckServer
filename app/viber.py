@@ -26,7 +26,7 @@ def send_viber_message(alarm_message: str) -> None:
     for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
-        except Exception as ex: # noqa W0718 viberbot only has bare exception
+        except Exception as ex:  # noqa: W0718 viberbot only has bare exception
             if "notSubscribed" in ex.args[0]:
                 recipients = {name: chat_id for chat_id, name in allvars.viber_users.items()}
                 bot_admin = allvars.viber_users["admin"]
