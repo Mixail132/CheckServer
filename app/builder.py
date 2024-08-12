@@ -25,7 +25,7 @@ def glue_scripts(
             for line in script:
                 if 'app.' in line:
                     continue
-                elif '"""' in line:
+                if '"""' in line:
                     continue
                 elif '__name__' in line:
                     break
