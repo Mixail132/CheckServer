@@ -53,3 +53,16 @@ class Vars:
 
 
 allvars = Vars()
+
+
+if __name__ == "__main__":
+    print(
+        allvars.viber_users,
+        allvars.viber_configs,
+        allvars.telegram_users,
+        allvars.telegram_configs,
+        allvars.hosts,
+        allvars.sendings,
+        allvars.messages,
+        sep="\n",
+    )
