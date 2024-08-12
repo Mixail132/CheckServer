@@ -1,7 +1,7 @@
 import subprocess
 
-from app.vars import Vars, allvars
 from app.telegram import send_telegram_message
+from app.vars import Vars, allvars
 from app.viber import send_viber_message
 
 

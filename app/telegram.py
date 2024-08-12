@@ -2,7 +2,6 @@ import telebot
 
 from app.vars import allvars
 
-
 telegramtoken = allvars.telegram_configs["TELEGRAMTOKEN"]
 bot = telebot.TeleBot(telegramtoken)
 

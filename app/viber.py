@@ -1,10 +1,8 @@
-from app.vars import allvars
-from app.vars import DIR_STATIC
-
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
+from app.vars import DIR_STATIC, allvars
 
 vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
