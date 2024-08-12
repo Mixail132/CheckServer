@@ -27,7 +27,7 @@ def glue_scripts(
                     continue
                 if '"""' in line:
                     continue
-                elif '__name__' in line:
+                if '__name__' in line:
                     break
                 out.write(line)
             out.write("\n\n")
