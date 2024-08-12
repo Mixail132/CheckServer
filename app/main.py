@@ -36,7 +36,7 @@ class AuditShields:
 
         if "TTL" in output:
             return False
-        elif "100%" in output:
+        if "100%" in output:
             return True
 
     def is_network_out(self, network: str) -> bool:
