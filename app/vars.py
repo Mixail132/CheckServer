@@ -35,10 +35,9 @@ configs = IniSection()
 configs.read("vars.ini", "utf-8")
 parser = configs["VARS"].parser
 headers = parser.sections()
-sources = []
-for net_type in ["WIFI", "DLAN", "INET"]:
-    sources += [source for source in headers if net_type in source]
 
+nets = ["WIFI", "DLAN", "INET"]
+sources = [source for net_type in nets for source in headers if net_type in source]
 
 hosts = {source: parser.section[f"{source}"] for source in sources}
 telegram_users = dict(parser.section["TELEGRAM_USERS"].items())
