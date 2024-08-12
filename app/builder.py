@@ -53,15 +53,17 @@ if __name__ == "__main__":
          "autopep8",
          "--in-place",
          "--aggressive",
-         output_file
-        ]
+         output_file,
+         ],
+        check=True
     )
 
     subprocess.run(
         [
          "isort",
          output_file
-        ]
+        ],
+        check=True
     )
 
     subprocess.run(
@@ -81,5 +83,6 @@ if __name__ == "__main__":
             DIR_TEMP / "build",
             "--specpath",
             DIR_TEMP
-        ]
+        ],
+        check=True
     )

@@ -18,7 +18,12 @@ class AuditShields:
     def ping_host(ip_address: str) -> bool:
         """ Checks a single host if it's up or out. """
         command = ["ping", "-n", "1", ip_address, ]
-        subprocess.run(["chcp", "437"], shell=True, stdout=subprocess.DEVNULL, )
+        subprocess.run(
+            ["chcp", "437"],
+            check=True,
+            shell=True,
+            stdout=subprocess.DEVNULL,
+        )
         try:
             output = subprocess.check_output(
                 command,
