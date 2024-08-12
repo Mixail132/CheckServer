@@ -14,10 +14,10 @@ def glue_scripts(
         output_script: Path,
 ) -> None:
 
-    with (open(script_1, "r") as s1,
-          open(script_2, "r") as s2,
-          open(script_3, "r") as s3,
-          open(script_4, "r") as s4,
+    with (open(script_1, "r", encoding="utf-8") as s1,
+          open(script_2, "r", encoding="utf-8") as s2,
+          open(script_3, "r", encoding="utf-8") as s3,
+          open(script_4, "r", encoding="utf-8") as s4,
           open(output_script, "w") as out):
 
         for script in [s1, s2, s3, s4]:
