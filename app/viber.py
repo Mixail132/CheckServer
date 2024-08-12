@@ -5,6 +5,7 @@ from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
+
 vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
 viberavatar = DIR_STATIC / "logo.jpg"
