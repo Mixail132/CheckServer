@@ -13,6 +13,7 @@ def glue_scripts(
         script_4: Path,
         output_script: Path,
 ) -> None:
+    """ Combines all the scripts to a single one. """
 
     with (open(script_1, "r", encoding="utf-8") as s1,
           open(script_2, "r", encoding="utf-8") as s2,

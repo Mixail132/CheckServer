@@ -16,7 +16,7 @@ class AuditShields:
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
-        """ Checks a single host if it's up or out """
+        """ Checks a single host if it's up or out. """
         command = ["ping", "-n", "1", ip_address, ]
         subprocess.run(["chcp", "437"], shell=True, stdout=subprocess.DEVNULL, )
         try:
@@ -35,7 +35,7 @@ class AuditShields:
             return True
 
     def is_network_out(self, network: str) -> bool:
-        """ Checks an always working host to make sure its network works """
+        """ Checks an always working host to make sure its network works. """
         checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["in_touch"]
         is_out = self.ping_host(checking_host_ip)
         return is_out
@@ -48,7 +48,7 @@ class AuditShields:
         return self.shields_out
 
     def form_alarm_message(self) -> str:
-        """ Composes an alarm message text regarding the certain equipment alarm """
+        """ Composes an alarm message text regarding the certain equipment alarm. """
         message_text = ""
         for shield, status in self.shields_out.items():
             if not status:
@@ -60,7 +60,7 @@ class AuditShields:
 
     @staticmethod
     def send_alarm_message(text: str) -> None:
-        """ Sends the alarm message to proper Telegram and Viber users """
+        """ Sends the alarm message to proper Telegram and Viber users. """
         if text:
             text = f"Alarm!\n{text}"
             send_telegram_message(text)

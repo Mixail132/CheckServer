@@ -16,6 +16,7 @@ class IniSection(configparser.ConfigParser):
 
 class Vars:
     def __init__(self) -> None:
+        """ Reads the config file and matches its variables. """
 
         configs = IniSection()
         configs.read("vars.ini", "utf-8")

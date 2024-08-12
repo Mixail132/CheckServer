@@ -20,6 +20,8 @@ viber = Api(bot_config)
 
 
 def send_viber_message(alarm_message: str) -> None:
+    """ Sends a message to an existing Viber bot. """
+
     alarm_msg = TextMessage(text=alarm_message)
     for user_id in allvars.viber_users.values():
         try:
