@@ -8,7 +8,7 @@ class IniSection(configparser.ConfigParser):
 
 
 class Vars:
-    def __init__(self):
+    def __init__(self) -> None:
         configs = IniSection()
         configs.read("vars.ini", "utf-8")
         parser = configs["VARS"].parser

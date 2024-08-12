@@ -1,8 +1,15 @@
 from dirs import DIR_ROOT, DIR_APP, DIR_TEMP
 import subprocess
+from pathlib import Path
 
 
-def glue_scripts(script_1, script_2, script_3, script_4,  output_script):
+def glue_scripts(
+        script_1: Path,
+        script_2: Path,
+        script_3: Path,
+        script_4: Path,
+        output_script: Path,
+) -> None:
 
     with (open(script_1, "r") as s1,
           open(script_2, "r") as s2,

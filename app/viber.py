@@ -17,7 +17,7 @@ bot_config = BotConfiguration(
 viber = Api(bot_config)
 
 
-def send_viber_message(alarm_message):
+def send_viber_message(alarm_message: str) -> None:
     alarm_msg = TextMessage(text=alarm_message)
     for user_id in allvars.viber_users.values():
         try:
