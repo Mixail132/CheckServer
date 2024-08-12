@@ -11,6 +11,6 @@ app/commons.py
 static/db.xlsx
 static/logo.jpg
 static/tasks.txt
-
+static/errors
 try.py
 
