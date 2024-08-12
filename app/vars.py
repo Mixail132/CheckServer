@@ -34,12 +34,10 @@ class Vars:
         self.hosts = {
             source: parser.section[f"{source}"] for source in sources
         }
-        self.telegram_users = {
-            user: tid for user, tid in parser.section["TELEGRAM_USERS"].items()
-        }
-        self.viber_users = {
-            user: vid for user, vid in parser.section["VIBER_USERS"].items()
-        }
+        self.telegram_users = dict(parser.section["TELEGRAM_USERS"].items())
+
+        self.viber_users = dict(parser.section["VIBER_USERS"].items())
+
         self.viber_configs = {
             par.upper(): value for par, value in parser.section["VIBER_CONFIGS"].items()
         }
