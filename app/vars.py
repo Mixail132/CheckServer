@@ -1,7 +1,8 @@
 """ Picking the variables from 'ini' configure file. """
+
 import configparser
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 DIR_ROOT = Path(__file__).parent.parent.resolve()
@@ -11,16 +12,18 @@ DIR_STATIC = DIR_ROOT / "static"
 
 
 class IniSection(configparser.ConfigParser):
-    """ Makes the builtin method to be returned. """
+    """Makes the builtin method to be returned."""
+
     @property
     def section(self):
-        """ Returns the builtin method. """
+        """Returns the builtin method."""
         return self._sections
 
 
 @dataclass
 class Vars:
-    """ Keeps all the configuration variables. """
+    """Keeps all the configuration variables."""
+
     viber_configs: dict[Any, Any]
     viber_users: dict[Any, Any]
     viber_configs: dict[Any, Any]
@@ -42,8 +45,12 @@ sources = [source for net_type in nets for source in headers if net_type in sour
 hosts = {source: parser.section[f"{source}"] for source in sources}
 telegram_users = dict(parser.section["TELEGRAM_USERS"].items())
 viber_users = dict(parser.section["VIBER_USERS"].items())
-telegram_configs = {par.upper(): value for par, value in parser.section["TELEGRAM_CONFIGS"].items()}
-viber_configs = {par.upper(): value for par, value in parser.section["VIBER_CONFIGS"].items()}
+telegram_configs = {
+    par.upper(): value for par, value in parser.section["TELEGRAM_CONFIGS"].items()
+}
+viber_configs = {
+    par.upper(): value for par, value in parser.section["VIBER_CONFIGS"].items()
+}
 messages = {source: parser.section["MESSAGES"][f"{source.lower()}"] for source in hosts}
 sendings = {source: False for source in hosts}
 
@@ -55,7 +62,7 @@ allvars = Vars(
     telegram_configs=telegram_configs,
     viber_configs=viber_configs,
     messages=messages,
-    sendings=sendings
+    sendings=sendings,
 )
 
 

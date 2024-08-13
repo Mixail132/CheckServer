@@ -10,17 +10,13 @@ vibertoken = allvars.viber_configs["VIBERTOKEN"]
 vibername = allvars.viber_configs["BOT_NAME"]
 viberavatar = allvars.viber_configs["VIBER_AVATAR"]
 
-bot_config = BotConfiguration(
-    name=vibername,
-    avatar=viberavatar,
-    auth_token=vibertoken
-)
+bot_config = BotConfiguration(name=vibername, avatar=viberavatar, auth_token=vibertoken)
 
 viber = Api(bot_config)
 
 
 def send_viber_message(alarm_message: str) -> None:
-    """ Sends a message to an existing Viber bot. """
+    """Sends a message to an existing Viber bot."""
 
     alarm_msg = TextMessage(text=alarm_message)
     for user_id in allvars.viber_users.values():
@@ -29,7 +25,9 @@ def send_viber_message(alarm_message: str) -> None:
         # pylint: disable=W0718
         except Exception as ex:
             if "notSubscribed" in ex.args[0]:
-                recipients = {name: chat_id for chat_id, name in allvars.viber_users.items()}
+                recipients = {
+                    name: chat_id for chat_id, name in allvars.viber_users.items()
+                }
                 bot_admin = allvars.viber_users["admin"]
                 byby_message = f"{recipients[user_id]} has left this chat."
                 byby_msg = TextMessage(text=byby_message)

@@ -1,8 +1,8 @@
 """ Sending the message to the Telegram users. """
 
 import telebot
-
 from requests.exceptions import ConnectTimeout
+
 from app.vars import allvars
 
 telegramtoken = allvars.telegram_configs["TELEGRAMTOKEN"]
@@ -10,7 +10,7 @@ bot = telebot.TeleBot(telegramtoken)
 
 
 def send_telegram_message(message_text: str) -> None:
-    """ Sends a message to an existing Telegram bot. """
+    """Sends a message to an existing Telegram bot."""
     for user in allvars.telegram_users.values():
         try:
             bot.send_message(user, message_text)

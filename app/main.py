@@ -8,7 +8,8 @@ from app.viber import send_viber_message
 
 
 class AuditShields:
-    """ Processes and keeps a state of the checked power shields. """
+    """Processes and keeps a state of the checked power shields."""
+
     def __init__(self, config_vars: Vars) -> None:
         self.vars = config_vars
         self.shields_out = {}
@@ -16,8 +17,13 @@ class AuditShields:
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
-        """ Checks a single host if it's up or out. """
-        command = ["ping", "-n", "1", ip_address, ]
+        """Checks a single host if it's up or out."""
+        command = [
+            "ping",
+            "-n",
+            "1",
+            ip_address,
+        ]
         subprocess.run(
             ["chcp", "437"],
             check=True,
@@ -28,8 +34,8 @@ class AuditShields:
             output = subprocess.check_output(
                 command,
                 stderr=subprocess.STDOUT,
-                encoding='cp866',
-                creationflags=subprocess.CREATE_NO_WINDOW
+                encoding="cp866",
+                creationflags=subprocess.CREATE_NO_WINDOW,
             )
         except subprocess.CalledProcessError as err:
             output = err.output
@@ -40,13 +46,13 @@ class AuditShields:
         return True
 
     def is_network_out(self, network: str) -> bool:
-        """ Checks an always working host to make sure its network works. """
+        """Checks an always working host to make sure its network works."""
         checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["in_touch"]
         is_out = self.ping_host(checking_host_ip)
         return is_out
 
     def check_shields(self, network: str) -> dict:
-        """ Checks if a power shield is on. """
+        """Checks if a power shield is on."""
         for shield, hosts in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
                 hosts_out = [self.ping_host(host) for host in hosts.values()]
@@ -54,7 +60,7 @@ class AuditShields:
         return self.shields_out
 
     def form_alarm_message(self) -> str:
-        """ Composes an alarm message text regarding the certain equipment alarm. """
+        """Composes an alarm message text regarding the certain equipment alarm."""
         message_text = ""
         for shield, status in self.shields_out.items():
             if not status:
@@ -66,7 +72,7 @@ class AuditShields:
 
     @staticmethod
     def send_alarm_message(text: str) -> None:
-        """ Sends the alarm message to proper Telegram and Viber users. """
+        """Sends the alarm message to proper Telegram and Viber users."""
         if text:
             text = f"Alarm!\n{text}"
             send_telegram_message(text)

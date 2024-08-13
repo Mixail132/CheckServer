@@ -7,27 +7,29 @@ from app.vars import DIR_APP, DIR_STATIC, DIR_TEMP
 
 
 def glue_scripts(
-        script_1: Path,
-        script_2: Path,
-        script_3: Path,
-        script_4: Path,
-        output_script: Path,
+    script_1: Path,
+    script_2: Path,
+    script_3: Path,
+    script_4: Path,
+    output_script: Path,
 ) -> None:
-    """ Combines all the scripts to a single one. """
+    """Combines all the scripts to a single one."""
 
-    with (open(script_1, "r", encoding="utf-8") as s1,
-          open(script_2, "r", encoding="utf-8") as s2,
-          open(script_3, "r", encoding="utf-8") as s3,
-          open(script_4, "r", encoding="utf-8") as s4,
-          open(output_script, "w", encoding="utf-8") as out):
+    with (
+        open(script_1, "r", encoding="utf-8") as s1,
+        open(script_2, "r", encoding="utf-8") as s2,
+        open(script_3, "r", encoding="utf-8") as s3,
+        open(script_4, "r", encoding="utf-8") as s4,
+        open(output_script, "w", encoding="utf-8") as out,
+    ):
 
         for script in [s1, s2, s3, s4]:
             for line in script:
-                if 'app.' in line:
+                if "app." in line:
                     continue
                 if '"""' in line:
                     continue
-                if '__name__' in line:
+                if "__name__" in line:
                     break
                 out.write(line)
             out.write("\n\n")
@@ -50,21 +52,15 @@ if __name__ == "__main__":
 
     subprocess.run(
         [
-         "autopep8",
-         "--in-place",
-         "--aggressive",
-         output_file,
-         ],
-        check=True
+            "autopep8",
+            "--in-place",
+            "--aggressive",
+            output_file,
+        ],
+        check=True,
     )
 
-    subprocess.run(
-        [
-         "isort",
-         output_file
-        ],
-        check=True
-    )
+    subprocess.run(["isort", output_file], check=True)
 
     subprocess.run(
         [
@@ -82,7 +78,7 @@ if __name__ == "__main__":
             "--workpath",
             DIR_TEMP / "build",
             "--specpath",
-            DIR_TEMP
+            DIR_TEMP,
         ],
-        check=True
+        check=True,
     )
