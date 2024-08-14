@@ -53,9 +53,9 @@ class AuditShields:
 
     def check_shields(self, network: str) -> dict:
         """Checks if a power shield is on."""
-        for shield, hosts in self.vars.hosts.items():
+        for shield, plant_ips in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
-                hosts_out = [self.ping_host(host) for host in hosts.values()]
+                hosts_out = [self.ping_host(host) for host in plant_ips.values()]
                 self.shields_out.update({shield: all(hosts_out)})
         return self.shields_out
 
