@@ -24,4 +24,4 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Analysing the code with isort
       run: |
-        isort $(git ls-files '*.py')
+        isort -c $(git ls-files '*.py')
