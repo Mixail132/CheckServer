@@ -21,7 +21,7 @@ class AuditShields:
         command = [
             "ping",
             "-n",
-            "1",
+            "3",
             ip_address,
         ]
         subprocess.run(
