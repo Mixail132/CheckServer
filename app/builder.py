@@ -1,9 +1,8 @@
 """ Actions for building the output 'exe' file. """
 
-import subprocess
 from pathlib import Path
-
 from app.vars import DIR_APP, DIR_STATIC, DIR_TEMP
+import subprocess
 
 
 def glue_scripts(
