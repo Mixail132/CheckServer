@@ -9,10 +9,13 @@ app/vars.ini
 app/commons.py
 app/logo.jpg
 app/try.py
+app/Cases.xlsx
 
 static/db.xlsx
 static/tasks.txt
 static/errors
 static/logo.jpg
+
+
 
 
