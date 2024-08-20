@@ -75,8 +75,8 @@ class AuditShields:
         """Sends the alarm message to proper Telegram and Viber users."""
         if text:
             text = f"Alarm!\n{text}"
-            send_telegram_message(text)
             send_viber_message(text)
+            send_telegram_message(text)
 
 
 auditor = AuditShields(allvars)
