@@ -30,7 +30,7 @@ def send_viber_message(alarm_message: str) -> None:
         except Exception as ex:
             if "notSubscribed" in ex.args[0]:
                 recipients = {
-                    name: chat_id for chat_id, name in allvars.viber_users.items()
+                    name: _id for _id, name in allvars.viber_users.items()
                 }
                 bot_admin = allvars.viber_users["admin"]
                 byby_message = f"{recipients[user_id]} has left this chat."
