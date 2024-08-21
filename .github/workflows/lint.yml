@@ -27,4 +27,8 @@ jobs:
         isort -c $(git ls-files '*.py')
     - name: 🚀 Analysing the code with flake8
       run: |
-        flake8 $(git ls-files '*.py')
+        flake8 --config settings/.flake8 $(git ls-files '*.py')
+    - name: 🚀 Analysing the code with black
+      run: |
+        black --check $(git ls-files '*.py')
+        
