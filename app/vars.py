@@ -54,7 +54,9 @@ viber_users = dict(parser.section["VIBER_USERS"].items())
 telegram_configs = dict(parser.section["TELEGRAM_CONFIGS"].items())
 viber_configs = dict(parser.section["VIBER_CONFIGS"].items())
 sendings = {source: False for source in hosts}
-messages = {source: parser.section["MESSAGES"][f"{source}"] for source in hosts}
+messages = {
+    source: parser.section["MESSAGES"][f"{source}"] for source in hosts
+}
 
 
 allvars = Vars(
