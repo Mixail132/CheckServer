@@ -26,7 +26,7 @@ class IniSection(configparser.ConfigParser):
 
 @dataclass
 class Vars:
-    """ Keeps all the configuration variables."""
+    """ Keeps all the config variables."""
 
     viber_configs: dict[Any, Any]
     viber_users: dict[Any, Any]
