@@ -5,8 +5,8 @@ from requests.exceptions import ConnectTimeout
 
 from app.vars import allvars
 
-telegramtoken = allvars.telegram_configs["TELEGRAMTOKEN"]
-bot = telebot.TeleBot(telegramtoken)
+TELEGRAMBOT_TOKEN = allvars.telegram_configs["TELEGRAMBOT_TOKEN"]
+bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
 
 
 def send_telegram_message(message_text: str) -> None:
