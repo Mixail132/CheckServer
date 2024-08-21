@@ -6,11 +6,15 @@ from viberbot.api.messages.text_message import TextMessage
 
 from app.vars import allvars
 
-vibertoken = allvars.viber_configs["VIBERTOKEN"]
-vibername = allvars.viber_configs["BOT_NAME"]
-viberavatar = allvars.viber_configs["VIBER_AVATAR"]
+VIBERBOT_NAME = allvars.viber_configs["VIBERBOT_NAME"]
+VIBERBOT_AVATAR = allvars.viber_configs["VIBERBOT_AVATAR"]
+VIBERBOT_TOKEN = allvars.viber_configs["VIBERBOT_TOKEN"]
 
-bot_config = BotConfiguration(name=vibername, avatar=viberavatar, auth_token=vibertoken)
+bot_config = BotConfiguration(
+    name=VIBERBOT_NAME,
+    avatar=VIBERBOT_AVATAR,
+    auth_token=VIBERBOT_TOKEN,
+)
 
 viber = Api(bot_config)
 
