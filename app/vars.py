@@ -1,4 +1,4 @@
-""" Picking the variables from 'ini' configure file. """
+""" Picking the variables from 'ini' configure file."""
 
 import configparser
 from dataclasses import dataclass
@@ -12,21 +12,21 @@ DIR_STATIC = DIR_ROOT / "static"
 
 
 class IniSection(configparser.ConfigParser):
-    """ Redefine built in methods."""
+    """Redefine built in methods."""
 
     @property
     def section(self):
-        """ Returns the builtin method."""
+        """Returns the builtin method."""
         return self._sections
 
     def optionxform(self, optionstr):
-        """ Returns the config keys in the case they are. """
+        """Returns the config keys in the case they are."""
         return optionstr
 
 
 @dataclass
 class Vars:
-    """ Keeps all the config variables."""
+    """Keeps all the config variables."""
 
     viber_configs: dict[Any, Any]
     viber_users: dict[Any, Any]
