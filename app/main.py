@@ -11,9 +11,9 @@ class AuditShields:
     """Processes and keeps a state of the checked power shields."""
 
     def __init__(self, config_vars: Vars) -> None:
-        self.vars = config_vars
-        self.shields_out = {}
-        self.messages_sent = {}
+        self.vars: Vars = config_vars
+        self.shields_out: dict = {}
+        self.messages_sent: dict = {}
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:

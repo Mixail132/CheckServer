@@ -28,7 +28,7 @@ class IniSection(configparser.ConfigParser):
     """Redefine built in methods."""
 
     @property
-    def section(self):
+    def part(self):
         """Returns the builtin method."""
         return self._sections
 
@@ -46,15 +46,14 @@ nets = ["WIFI", "DLAN", "INET"]
 sources = [
     source for net_type in nets for source in headers if net_type in source
 ]
-
-hosts = {source: parser.section[f"{source}"] for source in sources}
-telegram_users = dict(parser.section["TELEGRAM_USERS"].items())
-viber_users = dict(parser.section["VIBER_USERS"].items())
-telegram_configs = dict(parser.section["TELEGRAM_CONFIGS"].items())
-viber_configs = dict(parser.section["VIBER_CONFIGS"].items())
+hosts = {source: parser.part[f"{source}"] for source in sources}
+telegram_users = dict(parser.part["TELEGRAM_USERS"].items())
+viber_users = dict(parser.part["VIBER_USERS"].items())
+telegram_configs = dict(parser.part["TELEGRAM_CONFIGS"].items())
+viber_configs = dict(parser.part["VIBER_CONFIGS"].items())
 sendings = {source: False for source in hosts}
 messages = {
-    source: parser.section["MESSAGES"][f"{source}"] for source in hosts
+    source: parser.part["MESSAGES"][f"{source}"] for source in hosts
 }
 
 
