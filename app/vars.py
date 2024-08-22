@@ -1,4 +1,4 @@
-""" Picking the variables from 'ini' configure file. """
+""" Picking the variables from 'ini' configure file."""
 
 import configparser
 from dataclasses import dataclass
@@ -13,7 +13,7 @@ DIR_STATIC = DIR_ROOT / "static"
 
 @dataclass
 class Vars:
-    """Keeps all the configuration variables."""
+    """Keeps all the config variables."""
 
     messages: dict[Any, Any]
     hosts: dict[Any, Any]
@@ -25,12 +25,16 @@ class Vars:
 
 
 class IniSection(configparser.ConfigParser):
-    """Makes the builtin method to be returned."""
+    """Redefine built in methods."""
 
     @property
-    def part(self):
+    def section(self):
         """Returns the builtin method."""
         return self._sections
+
+    def optionxform(self, optionstr):
+        """Returns the config keys in the case they are."""
+        return optionstr
 
 
 configs = IniSection()
@@ -39,19 +43,19 @@ parser = configs["VARS"].parser
 headers = parser.sections()
 
 nets = ["WIFI", "DLAN", "INET"]
-sources = [source for net_type in nets for source in headers if net_type in source]
+sources = [
+    source for net_type in nets for source in headers if net_type in source
+]
 
-hosts = {source: parser.part[f"{source}"] for source in sources}
-telegram_users = dict(parser.part["TELEGRAM_USERS"].items())
-viber_users = dict(parser.part["VIBER_USERS"].items())
-telegram_configs = {
-    par.upper(): value for par, value in parser.part["TELEGRAM_CONFIGS"].items()
-}
-viber_configs = {
-    par.upper(): value for par, value in parser.part["VIBER_CONFIGS"].items()
-}
-messages = {source: parser.part["MESSAGES"][f"{source.lower()}"] for source in hosts}
+hosts = {source: parser.section[f"{source}"] for source in sources}
+telegram_users = dict(parser.section["TELEGRAM_USERS"].items())
+viber_users = dict(parser.section["VIBER_USERS"].items())
+telegram_configs = dict(parser.section["TELEGRAM_CONFIGS"].items())
+viber_configs = dict(parser.section["VIBER_CONFIGS"].items())
 sendings = {source: False for source in hosts}
+messages = {
+    source: parser.section["MESSAGES"][f"{source}"] for source in hosts
+}
 
 
 allvars = Vars(

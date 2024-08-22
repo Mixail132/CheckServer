@@ -55,12 +55,14 @@ class AuditShields:
         """Checks if a power shield is on."""
         for shield, plant_ips in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
-                hosts_out = [self.ping_host(host) for host in plant_ips.values()]
+                hosts_out = [
+                    self.ping_host(host) for host in plant_ips.values()
+                ]
                 self.shields_out.update({shield: all(hosts_out)})
         return self.shields_out
 
     def form_alarm_message(self) -> str:
-        """Composes an alarm message text regarding the certain equipment alarm."""
+        """Composes an alarm message regarding the certain equipment alarm."""
         message_text = ""
         for shield, status in self.shields_out.items():
             if not status:
