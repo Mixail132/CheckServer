@@ -37,6 +37,6 @@ def send_viber_message(alarm_message: str) -> None:
 
 
 if __name__ == "__main__":
-    admin = allvars.viber_users["admin"]
+    viberbot_admin = allvars.viber_users["admin"]
     check_message = TextMessage(text="Check the bot!")
-    viber.send_messages(admin, check_message)
+    viber.send_messages(viberbot_admin, check_message)
