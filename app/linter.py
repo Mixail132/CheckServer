@@ -16,7 +16,7 @@ def run_linters():
         ["mypy", "--config-file", f"{DIR_LINTERS / 'mypy.ini'}", DIR_APP],
     )
     for command in commands:
-        print(command[0])
+        print("🔥 ", command[0], "\n")
         subprocess.run(command, check=False)
 
 

@@ -20,19 +20,19 @@ jobs:
         pip install pylint
         pip install -r requirements.txt
         pip list
-    - name: 🚀 Analysing the code with pylint
+    - name: 🔥 Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
-    - name: 🚀 Analysing the code with isort
+    - name: 🔥 Analysing the code with isort
       run: |
         isort -c $(git ls-files '*.py')
-    - name: 🚀 Analysing the code with flake8
+    - name: 🔥 Analysing the code with flake8
       run: |
         flake8 --config .github/settings/.flake8 $(git ls-files '*.py')
-    - name: 🚀 Analysing the code with black
+    - name: 🔥 Analysing the code with black
       run: |
         black --check --line-length 79 $(git ls-files '*.py')
-    - name: 🚀 Analysing the code with mypy
+    - name: 🔥 Analysing the code with mypy
       run: |
         mypy --config-file .github/settings/mypy.ini $(git ls-files '*.py')
         
