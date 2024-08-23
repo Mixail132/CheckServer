@@ -5,8 +5,8 @@ __pycache__
 
 .venv
 venv
-
-temp
+.temp
+.cache
 
 app/vars.ini
 app/commons.py
