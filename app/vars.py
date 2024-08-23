@@ -34,7 +34,7 @@ class IniSection(configparser.ConfigParser):
 
 configs = IniSection()
 configs.read("vars.ini", "utf-8")
-headers =configs.sections()
+headers = configs.sections()
 
 nets = ["WIFI", "DLAN", "INET"]
 sources = [
