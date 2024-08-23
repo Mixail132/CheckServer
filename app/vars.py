@@ -9,6 +9,7 @@ DIR_ROOT = Path(__file__).parent.parent.resolve()
 DIR_APP = DIR_ROOT / "app"
 DIR_TEMP = DIR_ROOT / "temp"
 DIR_STATIC = DIR_ROOT / "static"
+DIR_LINTERS = DIR_ROOT / ".github" / "settings"
 
 
 @dataclass
