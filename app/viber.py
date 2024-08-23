@@ -26,13 +26,12 @@ def send_viber_message(alarm_message: str) -> None:
     for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
-        # pylint: disable=W0718
         except Exception as ex:
             if "notSubscribed" in ex.args[0]:
                 recipients = {
                     name: _id for _id, name in allvars.viber_users.items()
                 }
-                bot_admin = allvars.viber_users["admin"]
+                bot_admin = allvars.viber_users["Admin"]
                 byby_message = f"{recipients[user_id]} has left this chat."
                 byby_msg = TextMessage(text=byby_message)
                 viber.send_messages(bot_admin, [byby_msg])
@@ -41,6 +40,6 @@ def send_viber_message(alarm_message: str) -> None:
 
 
 if __name__ == "__main__":
-    viberbot_admin = allvars.viber_users["admin"]
+    viberbot_admin = allvars.viber_users["Admin"]
     check_message = TextMessage(text="Check the bot!")
     viber.send_messages(viberbot_admin, check_message)

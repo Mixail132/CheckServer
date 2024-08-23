@@ -19,5 +19,5 @@ def send_telegram_message(message_text: str) -> None:
 
 
 if __name__ == "__main__":
-    admin = allvars.telegram_users["admin"]
+    admin = allvars.telegram_users["Admin"]
     bot.send_message(admin, "The bot checking!")
