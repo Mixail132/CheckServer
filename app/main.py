@@ -6,6 +6,8 @@ from app.telegram import send_telegram_message
 from app.vars import Vars, allvars
 from app.viber import send_viber_message
 
+CREATE_NO_WINDOW: int = 134217728
+
 
 class AuditShields:
     """Processes and keeps a state of the checked power shields."""
@@ -35,7 +37,7 @@ class AuditShields:
                 command,
                 stderr=subprocess.STDOUT,
                 encoding="cp866",
-                creationflags=134217728,
+                creationflags=CREATE_NO_WINDOW,
             )
         except subprocess.CalledProcessError as err:
             output = err.output
@@ -55,9 +57,7 @@ class AuditShields:
         """Checks if a power shield is on."""
         for shield, plant_ips in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
-                hosts_out = [
-                    self.ping_host(host) for host in plant_ips.values()
-                ]
+                hosts_out = [self.ping_host(host) for host in plant_ips.values()]
                 self.shields_out.update({shield: all(hosts_out)})
         return self.shields_out
 
