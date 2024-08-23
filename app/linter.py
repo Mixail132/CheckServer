@@ -12,7 +12,7 @@ def run_linters():
         ["pylint", f"--rcfile={DIR_LINTERS / '.pylintrc'}", "app"],
         ["isort", "-c", DIR_APP],
         ["flake8", "--config", f"{DIR_LINTERS / '.flake8'}", DIR_APP],
-        ["black", "--diff", "--config", f"{DIR_LINTERS / '.black'}", "."],
+        ["black", "--check", "--config", f"{DIR_LINTERS / '.black'}", "."],
         ["mypy", "--config-file", f"{DIR_LINTERS / 'mypy.ini'}", DIR_APP],
     )
     for command in commands:
