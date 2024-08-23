@@ -30,7 +30,7 @@ class AuditShields:
             shell=True,
             stdout=subprocess.DEVNULL,
         )
-        # type: ignore
+        subprocess.CREATE_NO_WINDOW = 134217728
         try:
             output = subprocess.check_output(
                 command,
