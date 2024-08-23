@@ -35,12 +35,14 @@ class IniSection(configparser.ConfigParser):
 
 configs = IniSection()
 configs.read("vars.ini", "utf-8")
-headers = configs.sections()
 
+headers = configs.sections()
 nets = ["WIFI", "DLAN", "INET"]
-sources = [
-    source for net_type in nets for source in headers if net_type in source
-]
+sources = []
+
+for net in nets:
+    sources += [source for source in headers if net in source]
+
 hosts = {source: dict(configs[f"{source}"].items()) for source in sources}
 telegram_users = dict(configs["TELEGRAM_USERS"].items())
 viber_users = dict(configs["VIBER_USERS"].items())
