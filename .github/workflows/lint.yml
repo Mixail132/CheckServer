@@ -30,7 +30,7 @@ jobs:
         flake8 --config .github/settings/.flake8 $(git ls-files '*.py')
     - name: 🔥 Analysing the code with black
       run: |
-        black --diff --config .github/settings/.black $(git ls-files '*.py')
+        black --check --config .github/settings/.black $(git ls-files '*.py')
     - name: 🔥 Analysing the code with mypy
       run: |
         mypy --config-file .github/settings/mypy.ini $(git ls-files '*.py')
