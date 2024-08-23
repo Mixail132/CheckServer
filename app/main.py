@@ -30,13 +30,14 @@ class AuditShields:
             shell=True,
             stdout=subprocess.DEVNULL,
         )
+        # type: ignore
         try:
             output = subprocess.check_output(
                 command,
                 stderr=subprocess.STDOUT,
                 encoding="cp866",
                 creationflags=subprocess.CREATE_NO_WINDOW,
-            )  # type: ignore
+            )
         except subprocess.CalledProcessError as err:
             output = err.output
 
