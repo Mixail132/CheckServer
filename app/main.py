@@ -47,7 +47,7 @@ class AuditShields:
 
     def is_network_out(self, network: str) -> bool:
         """Checks an always working host to make sure its network works."""
-        checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["in_touch"]
+        checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["IN_TOUCH"]
         is_out = self.ping_host(checking_host_ip)
         return is_out
 
