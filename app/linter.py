@@ -1,18 +1,23 @@
+"""Run the linters locally."""
+
 import subprocess
-from app.vars import DIR_LINTERS_SETTINGS, DIR_APP
+
+from app.vars import DIR_APP, DIR_LINTERS
+
 
 def run_linters():
-    files = f"{DIR_APP / '*.py'}"
+    """Launches the linters with their settings."""
+
     commands = (
-        ["pylint", "app"],
+        ["pylint", f"--rcfile={DIR_LINTERS / '.pylintrc'}", "app"],
         ["isort", "-c", DIR_APP],
-        ["flake8", "--config", f"{DIR_LINTERS_SETTINGS / '.flake8'}", files],
-        ["black", "--check", "--line-length", "79", files],
-        ["mypy", "--config-file", f"{DIR_LINTERS_SETTINGS / 'mypy.ini'}", DIR_APP]
+        ["flake8", "--config", f"{DIR_LINTERS / '.flake8'}", DIR_APP],
+        ["black", "--diff", "--config", f"{DIR_LINTERS / '.black'}", "."],
+        ["mypy", "--config-file", f"{DIR_LINTERS / 'mypy.ini'}", DIR_APP],
     )
     for command in commands:
         print(command[0])
-        subprocess.run(command)
+        subprocess.run(command, check=False)
 
 
 if __name__ == "__main__":
