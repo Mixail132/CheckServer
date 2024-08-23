@@ -27,11 +27,6 @@ class Vars:
 class IniSection(configparser.ConfigParser):
     """Redefine built in methods."""
 
-    @property
-    def part(self):
-        """Returns the builtin method."""
-        return self._sections
-
     def optionxform(self, optionstr):
         """Returns the config keys in the case they are."""
         return optionstr
@@ -39,20 +34,19 @@ class IniSection(configparser.ConfigParser):
 
 configs = IniSection()
 configs.read("vars.ini", "utf-8")
-parser = configs["VARS"].parser
-headers = parser.sections()
+headers =configs.sections()
 
 nets = ["WIFI", "DLAN", "INET"]
 sources = [
     source for net_type in nets for source in headers if net_type in source
 ]
-hosts = {source: parser.part[f"{source}"] for source in sources}
-telegram_users = dict(parser.part["TELEGRAM_USERS"].items())
-viber_users = dict(parser.part["VIBER_USERS"].items())
-telegram_configs = dict(parser.part["TELEGRAM_CONFIGS"].items())
-viber_configs = dict(parser.part["VIBER_CONFIGS"].items())
+hosts = {source: dict(configs[f"{source}"].items()) for source in sources}
+telegram_users = dict(configs["TELEGRAM_USERS"].items())
+viber_users = dict(configs["VIBER_USERS"].items())
+telegram_configs = dict(configs["TELEGRAM_CONFIGS"].items())
+viber_configs = dict(configs["VIBER_CONFIGS"].items())
 sendings = {source: False for source in hosts}
-messages = {source: parser.part["MESSAGES"][f"{source}"] for source in hosts}
+messages = {source: configs["MESSAGES"][f"{source}"] for source in hosts}
 
 
 allvars = Vars(
