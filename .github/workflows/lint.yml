@@ -19,7 +19,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
-        pip list
     - name: 🔥 Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
@@ -31,7 +30,7 @@ jobs:
         flake8 --config .github/settings/.flake8 $(git ls-files '*.py')
     - name: 🔥 Analysing the code with black
       run: |
-        black --check --config .github/settings/.black $(git ls-files '*.py')
+        black --diff --config .github/settings/.black $(git ls-files '*.py')
     - name: 🔥 Analysing the code with mypy
       run: |
         mypy --config-file .github/settings/mypy.ini $(git ls-files '*.py')
