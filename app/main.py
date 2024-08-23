@@ -30,13 +30,12 @@ class AuditShields:
             shell=True,
             stdout=subprocess.DEVNULL,
         )
-        subprocess.CREATE_NO_WINDOW = 134217728
         try:
             output = subprocess.check_output(
                 command,
                 stderr=subprocess.STDOUT,
                 encoding="cp866",
-                creationflags=subprocess.CREATE_NO_WINDOW,
+                creationflags=134217728,
             )
         except subprocess.CalledProcessError as err:
             output = err.output
