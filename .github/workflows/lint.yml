@@ -31,4 +31,7 @@ jobs:
     - name: 🚀 Analysing the code with black
       run: |
         black --check --line-length 79 $(git ls-files '*.py')
+    - name: 🚀 Analysing the code with mypy
+      run: |
+        mypy --config-file .github/settings/mypy.ini $(git ls-files '*.py')
         
