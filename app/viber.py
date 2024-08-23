@@ -26,6 +26,7 @@ def send_viber_message(alarm_message: str) -> None:
     for user_id in allvars.viber_users.values():
         try:
             viber.send_messages(user_id, [alarm_msg])
+        # pylint: disable=W0718
         except Exception as ex:
             if "notSubscribed" in ex.args[0]:
                 recipients = {
