@@ -36,7 +36,7 @@ class AuditShields:
                 stderr=subprocess.STDOUT,
                 encoding="cp866",
                 creationflags=subprocess.CREATE_NO_WINDOW,
-            )   # type: ignore
+            )  # type: ignore
         except subprocess.CalledProcessError as err:
             output = err.output
 
