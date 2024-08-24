@@ -2,7 +2,7 @@
 
 import subprocess
 
-from app.vars import DIR_APP, DIR_LINTERS
+from app.dirs import DIR_APP, DIR_LINTERS
 
 
 def run_linters():
@@ -12,7 +12,7 @@ def run_linters():
         ["pylint", f"--rcfile={DIR_LINTERS / '.pylintrc'}", "app"],
         ["isort", "-c", DIR_APP],
         ["flake8", "--config", f"{DIR_LINTERS / '.flake8'}", DIR_APP],
-        ["black", "--check", "--config", f"{DIR_LINTERS / '.black'}", "."],
+        ["black", "--diff", "--config", f"{DIR_LINTERS / '.black'}", "."],
         ["mypy", "--config-file", f"{DIR_LINTERS / 'mypy.ini'}", DIR_APP],
     )
     for command in commands:

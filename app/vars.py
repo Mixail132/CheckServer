@@ -2,14 +2,7 @@
 
 import configparser
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
-
-DIR_ROOT = Path(__file__).parent.parent.resolve()
-DIR_APP = DIR_ROOT / "app"
-DIR_LINTERS = DIR_ROOT / ".github" / "settings"
-DIR_TEMP = DIR_ROOT / ".temp"
-DIR_STATIC = DIR_ROOT / "static"
 
 
 @dataclass
@@ -50,7 +43,6 @@ telegram_configs = dict(configs["TELEGRAM_CONFIGS"].items())
 viber_configs = dict(configs["VIBER_CONFIGS"].items())
 sendings = {source: False for source in hosts}
 messages = {source: configs["MESSAGES"][f"{source}"] for source in hosts}
-
 
 allvars = Vars(
     hosts=hosts,
