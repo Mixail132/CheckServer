@@ -1,24 +1,16 @@
-from app.vars import read_config
-from app.vars import DIR_APP
+"""
+Check weather the configuration variables
+have been completely read from 'ini' file.
+"""
 
 
-def test_config_file_has_completely_read():
-    path = "../app/vars.ini"
-    with open(path, "r", encoding="utf-8") as file:
-        params = []
-        for line in file:
-            if line.startswith(";"):
-                continue
-            elif line.startswith("["):
-                continue
-            elif line == "\n":
-                continue
-            else:
-                params.append(line)
-    for param in params:
-        print(param)
+def test_config_file_has_completely_read(
+    test_read_vars: list,
+    proj_read_vars: list,
+) -> None:
+    """Checks the vars number and weather they've been completely read."""
 
+    for var in test_read_vars:
+        assert var in proj_read_vars
 
-
-if __name__ == "__main__":
-    test_config_file_has_completely_read()
+    assert len(proj_read_vars) == len(test_read_vars)
