@@ -4,6 +4,8 @@ import configparser
 from dataclasses import dataclass
 from typing import Any
 
+from app.dirs import DIR_APP
+
 
 @dataclass
 class Vars:
@@ -27,7 +29,8 @@ class IniSection(configparser.ConfigParser):
 
 
 configs = IniSection()
-configs.read("vars.ini", "utf-8")
+inifile = DIR_APP / "vars.ini"
+obj = configs.read(inifile, "utf-8")
 
 headers = configs.sections()
 nets = ["WIFI", "DLAN", "INET"]
