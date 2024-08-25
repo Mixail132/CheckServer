@@ -1,2 +1,2 @@
 [MASTER]
-ignore = commons.py
+ignore = commons.py, try.py
