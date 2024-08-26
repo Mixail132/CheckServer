@@ -3,7 +3,7 @@
 import subprocess
 
 from app.telegram import send_telegram_message
-from app.vars import Vars, allvars
+from app.vars import Vars, all_vars
 from app.viber import send_viber_message
 
 CREATE_NO_WINDOW: int = 134217728
@@ -83,7 +83,7 @@ class AuditShields:
             send_telegram_message(text)
 
 
-auditor = AuditShields(allvars)
+auditor = AuditShields(all_vars)
 
 while True:
     for net in ["WIFI", "DLAN", "INET"]:

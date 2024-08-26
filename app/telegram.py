@@ -3,15 +3,15 @@
 import telebot
 from requests.exceptions import ConnectTimeout
 
-from app.vars import allvars
+from app.vars import all_vars
 
-TELEGRAMBOT_TOKEN = allvars.telegram_configs["TELEGRAMBOT_TOKEN"]
+TELEGRAMBOT_TOKEN = all_vars.telegram_configs["TELEGRAMBOT_TOKEN"]
 bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
 
 
 def send_telegram_message(message_text: str) -> None:
     """Sends a message to an existing Telegram bot."""
-    for user in allvars.telegram_users.values():
+    for user in all_vars.telegram_users.values():
         try:
             bot.send_message(user, message_text)
         except ConnectTimeout:
@@ -19,5 +19,5 @@ def send_telegram_message(message_text: str) -> None:
 
 
 if __name__ == "__main__":
-    admin = allvars.telegram_users["Admin"]
+    admin = all_vars.telegram_users["Admin"]
     bot.send_message(admin, "The bot checking!")

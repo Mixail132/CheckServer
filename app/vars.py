@@ -1,23 +1,8 @@
 """ Picking the variables from 'ini' configure file."""
 
 import configparser
-from dataclasses import dataclass
-from typing import Any
 
 from app.dirs import DIR_APP
-
-
-@dataclass
-class Vars:
-    """Keeps all the config variables."""
-
-    messages: dict[Any, Any]
-    hosts: dict[Any, Any]
-    sendings: dict[Any, Any]
-    viber_configs: dict[Any, Any]
-    viber_users: dict[Any, Any]
-    telegram_configs: dict[Any, Any]
-    telegram_users: dict[Any, Any]
 
 
 class IniSection(configparser.ConfigParser):
@@ -28,44 +13,47 @@ class IniSection(configparser.ConfigParser):
         return optionstr
 
 
-configs = IniSection()
-inifile = DIR_APP / "vars.ini"
-obj = configs.read(inifile, "utf-8")
+class Vars:
+    """Keeps all the config variables."""
 
-headers = configs.sections()
-nets = ["WIFI", "DLAN", "INET"]
-sources = []
+    def __init__(self, config_file: str) -> None:
+        """Reads the variables from a config file."""
+        configs = IniSection()
+        inifile = DIR_APP / config_file
+        configs.read(inifile, "utf-8")
 
-for net in nets:
-    sources += [source for source in headers if net in source]
+        headers = configs.sections()
+        nets = ["WIFI", "DLAN", "INET"]
+        sources = []
 
-hosts = {source: dict(configs[f"{source}"].items()) for source in sources}
-telegram_users = dict(configs["TELEGRAM_USERS"].items())
-viber_users = dict(configs["VIBER_USERS"].items())
-telegram_configs = dict(configs["TELEGRAM_CONFIGS"].items())
-viber_configs = dict(configs["VIBER_CONFIGS"].items())
-sendings = {source: False for source in hosts}
-messages = {source: configs["MESSAGES"][f"{source}"] for source in hosts}
+        for net in nets:
+            sources += [source for source in headers if net in source]
 
-allvars = Vars(
-    hosts=hosts,
-    telegram_users=telegram_users,
-    viber_users=viber_users,
-    telegram_configs=telegram_configs,
-    viber_configs=viber_configs,
-    messages=messages,
-    sendings=sendings,
-)
+        self.hosts = {
+            source: dict(configs[f"{source}"].items()) for source in sources
+        }
+        self.telegram_users = dict(configs["TELEGRAM_USERS"].items())
+        self.viber_users = dict(configs["VIBER_USERS"].items())
+        self.telegram_configs = dict(configs["TELEGRAM_CONFIGS"].items())
+        self.viber_configs = dict(configs["VIBER_CONFIGS"].items())
+        self.sendings = {source: False for source in self.hosts}
+        self.messages = {
+            source: configs["MESSAGES"][f"{source}"] for source in self.hosts
+        }
+
+
+allvars = Vars("vars.ini")
 
 
 if __name__ == "__main__":
+    all_vars = Vars("vars.ini")
     print(
-        allvars.viber_users,
-        allvars.viber_configs,
-        allvars.telegram_users,
-        allvars.telegram_configs,
-        allvars.hosts,
-        allvars.sendings,
-        allvars.messages,
+        all_vars.viber_users,
+        all_vars.viber_configs,
+        all_vars.telegram_users,
+        all_vars.telegram_configs,
+        all_vars.hosts,
+        all_vars.sendings,
+        all_vars.messages,
         sep="\n",
     )
