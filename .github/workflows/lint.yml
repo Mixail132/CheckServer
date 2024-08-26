@@ -22,7 +22,6 @@ jobs:
     - name: 🔥 Analysing the code with pylint
       run: |
         pylint --rcfile=.github/settings/.pylintrc $(git ls-files '*.py')
-        pylint $(git ls-files '*.py')
     - name: 🔥 Analysing the code with isort
       run: |
         isort -c $(git ls-files '*.py')
