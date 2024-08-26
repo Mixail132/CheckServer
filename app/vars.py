@@ -42,9 +42,6 @@ class Vars:
         }
 
 
-allvars = Vars("vars.ini")
-
-
 if __name__ == "__main__":
     all_vars = Vars("vars.ini")
     print(

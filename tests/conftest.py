@@ -33,8 +33,7 @@ def vars_read_for_work(
 ) -> list:
     """Matches variables read from the config file for the project."""
     config_vars = Vars(config_file)
-    all_vars = config_vars
-    allvars_attrs = dir(all_vars)
+    allvars_attrs = dir(config_vars)
     project_vars = []
 
     for attr in allvars_attrs:
@@ -43,7 +42,7 @@ def vars_read_for_work(
         if attr in ("sendings", "read_configs"):
             continue
 
-        project_vars.append(getattr(all_vars, attr))
+        project_vars.append(getattr(config_vars, attr))
 
     _vars = str(project_vars)
     vars_values = re.sub(r"'[^']*':", "", _vars, flags=re.DOTALL)
