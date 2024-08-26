@@ -67,6 +67,6 @@ def config_file_path(config_file: str) -> Path:
 @pytest.fixture
 def config_file() -> str:
     """Defines a config file for the test."""
-    config_file = "vars.ini"
+    config_file = "example_vars.ini"
 
     return config_file
