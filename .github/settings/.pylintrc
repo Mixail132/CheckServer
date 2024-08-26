@@ -1,2 +1,6 @@
-[MASTER]
+[MAIN]
 ignore = commons.py, try.py
+
+[MESSAGES CONTROL]
+disable = too-few-public-methods,
+          redefined-outer-name
