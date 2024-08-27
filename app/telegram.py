@@ -3,9 +3,10 @@
 import telebot
 from requests.exceptions import ConnectTimeout
 
+from app.dirs import FILE_VARS
 from app.vars import Vars
 
-telegram_vars = Vars("vars.ini")
+telegram_vars = Vars(FILE_VARS)
 TELEGRAMBOT_TOKEN = telegram_vars.telegram_configs["TELEGRAMBOT_TOKEN"]
 bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
 

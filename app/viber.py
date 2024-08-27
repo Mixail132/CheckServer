@@ -4,9 +4,10 @@ from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
 
+from app.dirs import FILE_VARS
 from app.vars import Vars
 
-viber_vars = Vars("vars.ini")
+viber_vars = Vars(FILE_VARS)
 VIBERBOT_NAME = viber_vars.viber_configs["VIBERBOT_NAME"]
 VIBERBOT_AVATAR = viber_vars.viber_configs["VIBERBOT_AVATAR"]
 VIBERBOT_TOKEN = viber_vars.viber_configs["VIBERBOT_TOKEN"]

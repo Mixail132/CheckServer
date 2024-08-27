@@ -1,8 +1,9 @@
 """ Picking the variables from 'ini' configure file."""
 
 import configparser
+from pathlib import Path
 
-from app.dirs import DIR_APP
+from app.dirs import FILE_VARS
 
 
 class IniSection(configparser.ConfigParser):
@@ -16,11 +17,10 @@ class IniSection(configparser.ConfigParser):
 class Vars:
     """Keeps all the config variables."""
 
-    def __init__(self, config_file: str) -> None:
+    def __init__(self, config_file: Path) -> None:
         """Reads the variables from a config file."""
         configs = IniSection()
-        inifile = DIR_APP / config_file
-        configs.read(inifile, "utf-8")
+        configs.read(config_file, "utf-8")
 
         headers = configs.sections()
         nets = ["WIFI", "DLAN", "INET"]
@@ -43,7 +43,8 @@ class Vars:
 
 
 if __name__ == "__main__":
-    all_vars = Vars("vars.ini")
+    file_vars = FILE_VARS
+    all_vars = Vars(file_vars)
     print(
         all_vars.viber_users,
         all_vars.viber_configs,
