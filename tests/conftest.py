@@ -62,5 +62,4 @@ def config_file_path() -> Path:
     work_config_file = DIR_APP / "vars.ini"
     if work_config_file.is_file():
         return work_config_file
-    else:
-        return test_config_file
+    return test_config_file
