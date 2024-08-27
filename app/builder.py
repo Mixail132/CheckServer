@@ -23,6 +23,47 @@ def glue_scripts(
                 out.write("\n\n")
 
 
+def format_scripts(
+    output_script: Path,
+) -> None:
+    """Formats the total script using linters."""
+    subprocess.run(
+        [
+            "autopep8",
+            "--in-place",
+            "--aggressive",
+            output_script,
+        ],
+        check=True,
+    )
+
+    subprocess.run(["isort", output_script], check=True)
+
+
+def build_exe_file(output_script: Path) -> None:
+    """Builds an exe file from the total script."""
+    subprocess.run(
+        [
+            "pyinstaller",
+            "--noconfirm",
+            "--onefile",
+            "--windowed",
+            "--icon",
+            DIR_STATIC / "ico.ico",
+            "--name",
+            "CheckServer",
+            f"{output_script}",
+            "--distpath",
+            DIR_APP,
+            "--workpath",
+            DIR_TEMP / "build",
+            "--specpath",
+            DIR_TEMP,
+        ],
+        check=True,
+    )
+
+
 if __name__ == "__main__":
 
     files = [
@@ -36,36 +77,5 @@ if __name__ == "__main__":
     output_file = DIR_APP / "commons.py"
 
     glue_scripts(output_file, files)
-
-    subprocess.run(
-        [
-            "autopep8",
-            "--in-place",
-            "--aggressive",
-            output_file,
-        ],
-        check=True,
-    )
-
-    subprocess.run(["isort", output_file], check=True)
-
-    subprocess.run(
-        [
-            "pyinstaller",
-            "--noconfirm",
-            "--onefile",
-            "--windowed",
-            "--icon",
-            DIR_STATIC / "ico.ico",
-            "--name",
-            "CheckServer",
-            DIR_APP / "commons.py",
-            "--distpath",
-            DIR_APP,
-            "--workpath",
-            DIR_TEMP / "build",
-            "--specpath",
-            DIR_TEMP,
-        ],
-        check=True,
-    )
+    format_scripts(output_file)
+    build_exe_file(output_file)
