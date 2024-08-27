@@ -29,10 +29,10 @@ def vars_read_for_test(
 
 @pytest.fixture
 def vars_read_for_work(
-    config_file: str,
+    config_file_path: Path,
 ) -> list:
     """Matches variables read from the config file for the project."""
-    config_vars = Vars(config_file)
+    config_vars = Vars(config_file_path)
     allvars_attrs = dir(config_vars)
     project_vars = []
 
@@ -56,16 +56,10 @@ def vars_read_for_work(
 
 
 @pytest.fixture
-def config_file_path(config_file: str) -> Path:
+def config_file_path() -> Path:
     """Defines a system path to the config file."""
-    config_path = DIR_APP / config_file
-
-    return config_path
-
-
-@pytest.fixture
-def config_file() -> str:
-    """Defines a config file for the test."""
-    config_file = "example_vars.ini"
-
-    return config_file
+    test_config_file = DIR_APP / "example_vars.ini"
+    work_config_file = DIR_APP / "vars.ini"
+    if work_config_file.is_file():
+        return work_config_file
+    return test_config_file
