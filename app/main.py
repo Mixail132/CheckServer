@@ -1,10 +1,8 @@
-""" Starting the app. """
-
+"""Starting the app."""
 
 from app.audit import AuditShields
 from app.dirs import FILE_VARS
 from app.vars import Vars
-
 
 all_vars = Vars(FILE_VARS)
 auditor = AuditShields(all_vars)
