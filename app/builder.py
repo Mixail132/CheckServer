@@ -71,6 +71,7 @@ if __name__ == "__main__":
         DIR_APP / "vars.py",
         DIR_APP / "telegram.py",
         DIR_APP / "viber.py",
+        DIR_APP / "audit.py",
         DIR_APP / "main.py",
     ]
 
