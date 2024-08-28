@@ -95,7 +95,7 @@ def working_config_file_path() -> Path:
 
 
 @pytest.fixture
-def extended_config_file_path(example_config_file_path: Path):git
+def extended_config_file_path(example_config_file_path: Path):
     """
     Extends the example config file with a few parameters.
     Returns the system path to the file.
