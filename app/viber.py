@@ -27,13 +27,22 @@ class MyViberBot:
         )
         self.viber = Api(bot_config)
 
-    def send_viber_message(self, alarm_message: str) -> None:
-        """Sends a message to an existing Viber bot."""
+    def send_one_viber_message(self, user_id_: str, alarm_msg_: str) -> bool:
+        """Sends a message to a single Viber bot user."""
+        the_alarm_message = TextMessage(text=alarm_msg_)
+        try:
+            self.viber.send_messages(user_id_, [the_alarm_message])
+        except ConnectionError:
+            return False
 
-        alarm_msg = TextMessage(text=alarm_message)
+        return True
+
+    def send_series_viber_messages(self, alarm_message: str) -> None:
+        """Sends a message to a series of Viber bot users."""
+
         for user_id in viber_vars.viber_users.values():
             try:
-                self.viber.send_messages(user_id, [alarm_msg])
+                self.send_one_viber_message(user_id, alarm_message)
             # pylint: disable=W0718
             except Exception as ex:
                 if "notSubscribed" in ex.args[0]:
@@ -51,11 +60,5 @@ class MyViberBot:
 
 if __name__ == "__main__":
     viberbot_admin = viber_vars.viber_users["Admin"]
-    check_message = TextMessage(text="Check the bot!")
-    configs = BotConfiguration(
-        name=VIBERBOT_NAME,
-        avatar=VIBERBOT_AVATAR,
-        auth_token=VIBERBOT_TOKEN,
-    )
-    viber = Api(configs)
-    viber.send_messages(viberbot_admin, check_message)
+    viber_sender = MyViberBot()
+    viber_sender.send_one_viber_message(viberbot_admin, "Check the bot!")
