@@ -3,10 +3,8 @@
 import pytest
 
 from app.audit import AuditShields
-from app.dirs import DIR_ROOT
+from app.dirs import DIR_ROOT, GITHUB_ROOTDIR
 from app.vars import Vars
-
-GITHUB_ROOTDIR = "/home/runner/work/CheckServer/CheckServer"
 
 
 @pytest.mark.skipif(
