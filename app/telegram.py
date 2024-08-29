@@ -18,13 +18,19 @@ class MyTelegramBot:
         self.token = TELEGRAMBOT_TOKEN
         self.bot = telebot.TeleBot(self.token)
 
-    def send_telegram_message(self, message_text: str) -> None:
-        """Sends a message to the bot."""
+    def send_one_telegram_message(self, user_id_, alarm_msg_: str) -> bool:
+        """Sends a message to a single Viber bot user."""
+        try:
+            self.bot.send_message(user_id_, alarm_msg_)
+        except ConnectTimeout:
+            return False
+
+        return True
+
+    def send_series_telegram_messages(self, alarm_message: str) -> None:
+        """Sends a message to a series of Telegram bot users."""
         for user in telegram_vars.telegram_users.values():
-            try:
-                self.bot.send_message(user, message_text)
-            except ConnectTimeout:
-                continue
+            self.send_one_telegram_message(user, alarm_message)
 
 
 if __name__ == "__main__":
