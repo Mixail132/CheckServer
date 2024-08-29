@@ -3,7 +3,7 @@
 import subprocess
 import sys
 
-from app.telegram import send_telegram_message
+from app.telegram import MyTelegramBot
 from app.vars import Vars
 from app.viber import send_viber_message
 
@@ -90,4 +90,5 @@ class AuditShields:
         if text:
             text = f"Alarm!\n{text}"
             send_viber_message(text)
-            send_telegram_message(text)
+            telegram_message = MyTelegramBot()
+            telegram_message.send_telegram_message(text)
