@@ -52,7 +52,7 @@ class AuditShields:
         except subprocess.CalledProcessError as err:
             output = err.output
 
-        if "TTL" in output:
+        if "TTL" in output or "ttl" in output:
             return False
 
         return True
