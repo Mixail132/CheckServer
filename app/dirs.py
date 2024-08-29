@@ -11,3 +11,4 @@ DIR_TESTS = DIR_ROOT / "tests"
 FILE_VARS = DIR_APP / "vars.ini"
 if not FILE_VARS.is_file():
     FILE_VARS = DIR_APP / "example_vars.ini"
+GITHUB_ROOTDIR = "/home/runner/work/CheckServer/CheckServer"
