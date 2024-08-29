@@ -14,4 +14,4 @@ while True:
         if not auditor.is_network_out(net_):
             auditor.check_shields(net_)
     message = auditor.form_alarm_message()
-    auditor.send_alarm_message(message)
+    auditor.send_alarm_messages(message)
