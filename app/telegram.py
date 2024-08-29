@@ -2,6 +2,8 @@
 
 import telebot
 from requests.exceptions import ConnectTimeout
+from telebot.apihelper import ApiTelegramException
+from telebot.types import User
 
 from app.dirs import FILE_VARS
 from app.vars import Vars
@@ -17,6 +19,15 @@ class MyTelegramBot:
         """Initializes the bot."""
         self.token = TELEGRAMBOT_TOKEN
         self.bot = telebot.TeleBot(self.token)
+
+    def check_telegram_bot_exists(self) -> User | None:
+        """Checks if the bot exists."""
+        try:
+            get_bot = self.bot.get_me()
+        except ApiTelegramException:
+            get_bot = None
+
+        return get_bot
 
     def send_one_telegram_message(self, user_id_, alarm_msg_: str) -> bool:
         """Sends a message to a single Viber bot user."""
@@ -37,3 +48,4 @@ if __name__ == "__main__":
     check_bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
     admin = telegram_vars.telegram_users["Admin"]
     check_bot.send_message(admin, "The bot checking!")
+    print(check_bot.get_me())
