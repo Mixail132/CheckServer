@@ -1,6 +1,7 @@
 """ Executing the main logic of the app. """
 
 import subprocess
+import sys
 
 from app.telegram import send_telegram_message
 from app.vars import Vars
@@ -19,20 +20,35 @@ class AuditShields:
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
-        """Checks a single host if it's up or out."""
+        """Pings a single host if it's up or out depending on a platform."""
         command = [
             "ping",
-            "-n",
+            "-n" if sys.platform == "win32" else "-c",
             "3",
             ip_address,
         ]
-        try:
-            output = subprocess.check_output(
-                command,
-                stderr=subprocess.STDOUT,
-                encoding="cp866",
-                creationflags=CREATE_NO_WINDOW,
+
+        if sys.platform == "win32":
+            subprocess.run(
+                ["chcp", "437"],
+                check=True,
+                shell=True,
+                stdout=subprocess.DEVNULL,
             )
+
+        try:
+            if sys.platform == "win32":
+                output = subprocess.check_output(
+                    command,
+                    stderr=subprocess.STDOUT,
+                    encoding="cp866",
+                    creationflags=subprocess.CREATE_NO_WINDOW,
+                )
+            else:
+                output = subprocess.check_output(
+                    command, stderr=subprocess.STDOUT, encoding="utf-8"
+                )
+
         except subprocess.CalledProcessError as err:
             output = err.output
 
