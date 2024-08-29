@@ -8,10 +8,10 @@ from app.telegram import MyTelegramBot
 from app.vars import Vars
 
 
-# @pytest.mark.skipif(
-#     GITHUB_ROOTDIR in f"{DIR_ROOT}",
-#     reason="Denied to send requests from GitHub.",
-# )
+@pytest.mark.skipif(
+    GITHUB_ROOTDIR in f"{DIR_ROOT}",
+    reason="Denied to send requests from GitHub.",
+)
 def test_telegram_bot_exists(config_vars_set: Vars):
     """Checks weather the Telegrab bot exists."""
     test_bot = MyTelegramBot()
