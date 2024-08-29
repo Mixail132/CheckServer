@@ -19,6 +19,7 @@ class MyTelegramBot:
         """Initializes the bot."""
         self.token = TELEGRAMBOT_TOKEN
         self.bot = telebot.TeleBot(self.token)
+        self.admin = telegram_vars.telegram_users["Admin"]
 
     def check_telegram_bot_exists(self) -> User | None:
         """Checks if the bot exists."""
@@ -41,7 +42,18 @@ class MyTelegramBot:
     def send_series_telegram_messages(self, alarm_message: str) -> None:
         """Sends a message to a series of Telegram bot users."""
         for user in telegram_vars.telegram_users.values():
-            self.send_one_telegram_message(user, alarm_message)
+            try:
+                self.send_one_telegram_message(user, alarm_message)
+
+            except ApiTelegramException as err:
+                if "bot was blocked by the user" in err.args[0]:
+                    telegram_users = telegram_vars.telegram_users.items()
+                    user_who_blocked_bot = [
+                        key for key, val in telegram_users if val == user
+                    ][0]
+                    message = f"{user_who_blocked_bot} has blocked this bot!"
+                    self.send_one_telegram_message(self.admin, message)
+                continue
 
 
 if __name__ == "__main__":
