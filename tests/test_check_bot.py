@@ -28,5 +28,5 @@ def test_telegram_bot_exists(config_vars_set: Vars):
 
     assert bot_exists.first_name == bot_name, "Incorrect bot name in configs."
 
-    bot_username = bot_url.replace("@", "").replace(".bot", "")
+    bot_username = bot_url.replace("@", "")
     assert bot_username in bot_exists.username, "Wrong bot url in configs."
