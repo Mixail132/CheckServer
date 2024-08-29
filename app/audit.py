@@ -5,7 +5,7 @@ import sys
 
 from app.telegram import MyTelegramBot
 from app.vars import Vars
-from app.viber import send_viber_message
+from app.viber import MyViberBot
 
 CREATE_NO_WINDOW: int = 134217728
 
@@ -89,6 +89,7 @@ class AuditShields:
         """Sends the alarm message to proper Telegram and Viber users."""
         if text:
             text = f"Alarm!\n{text}"
-            send_viber_message(text)
-            telegram_message = MyTelegramBot()
-            telegram_message.send_telegram_message(text)
+            viber_sender = MyViberBot()
+            viber_sender.send_viber_message(text)
+            telegram_sender = MyTelegramBot()
+            telegram_sender.send_telegram_message(text)
