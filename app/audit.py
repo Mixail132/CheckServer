@@ -85,11 +85,11 @@ class AuditShields:
         return message_text
 
     @staticmethod
-    def send_alarm_message(text: str) -> None:
+    def send_alarm_messages(text: str) -> None:
         """Sends the alarm message to proper Telegram and Viber users."""
         if text:
             text = f"Alarm!\n{text}"
             viber_sender = MyViberBot()
             viber_sender.send_series_viber_messages(text)
             telegram_sender = MyTelegramBot()
-            telegram_sender.send_telegram_message(text)
+            telegram_sender.send_series_telegram_messages(text)
