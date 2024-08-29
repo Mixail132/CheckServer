@@ -1,11 +1,10 @@
 """Using system ping command hosts checking."""
 
 from app.audit import AuditShields
+from app.vars import Vars
 
-# from app.vars import Vars
 
-
-def test_base_ping_settings_work_fine(config_vars_set) -> None:
+def test_base_ping_settings_work_fine(config_vars_set: Vars) -> None:
     """Checks the project's ping job using always in touch server."""
 
     vars_ = config_vars_set
