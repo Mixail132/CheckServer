@@ -14,7 +14,7 @@ def test_base_ping_settings_work_fine(config_vars_set: Vars) -> None:
     # audit_shields = AuditShields(vars_)
     # in_touch_host = inet_hosts["IN_TOUCH"]
     # is_host_out = audit_shields.ping_host("www.google.com")
-    host = subprocess.run(["ping", "-n", "www.google.com"])
+    host = subprocess.run(["ping", "-c", "3", "www.google.com"])
     print(host)
     assert "TTL" in host or "ttl" in host
     # assert is_host_out is False
