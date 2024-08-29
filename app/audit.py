@@ -26,12 +26,6 @@ class AuditShields:
             "3",
             ip_address,
         ]
-        subprocess.run(
-            ["chcp", "437"],
-            check=True,
-            shell=True,
-            stdout=subprocess.DEVNULL,
-        )
         try:
             output = subprocess.check_output(
                 command,
