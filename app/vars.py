@@ -17,7 +17,7 @@ class IniSection(configparser.ConfigParser):
 class Vars:
     """Keeps all the config variables."""
 
-    def __init__(self, config_file: Path) -> None:
+    def __init__(self, config_file: Path | str) -> None:
         """Reads the variables from a config file."""
         configs = IniSection()
         configs.read(config_file, "utf-8")
