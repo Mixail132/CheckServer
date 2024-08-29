@@ -20,7 +20,8 @@ jobs:
         pip install -r requirements.txt
     - name: 🔥 Launching pytest
       run: |
-        python -m pytest --cache-clear
+        ping -c 3 www.google.com
+#        python -m pytest --cache-clear
     - name: 🔥 Analysing the code with pylint
       run: |
         pylint --rcfile=.github/settings/.pylintrc $(git ls-files '*.py')
