@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from app.dirs import DIR_APP
+from app.dirs import DIR_APP, FILE_VARS
 from app.vars import Vars
 
 
@@ -64,14 +64,13 @@ def vars_read_for_work(
 @pytest.fixture(params=["original_vars_number", "extended_vars_number"])
 def total_config_file_path(
     request,
-    github_config_file_path: Path,
     extended_config_file_path: Path,
 ) -> Path:
     """Defines a system path to the config file to be tested."""
     if request.param == "extended_vars_number":
         return extended_config_file_path
 
-    return github_config_file_path
+    return FILE_VARS
 
 
 @pytest.fixture
@@ -80,29 +79,6 @@ def example_config_file_path() -> Path:
     test_config_file = DIR_APP / "example_vars.ini"
 
     return test_config_file
-
-
-@pytest.fixture
-def working_config_file_path() -> Path:
-    """Defines a system path to the working config file."""
-    test_config_file = DIR_APP / "vars.ini"
-
-    return test_config_file
-
-
-@pytest.fixture
-def github_config_file_path(
-    working_config_file_path: Path,
-    example_config_file_path: Path,
-) -> Path:
-    """
-    Checks weather the working config file exists.
-    If not, chooses the example one to test on GitHub.
-    """
-    if working_config_file_path.is_file():
-        return working_config_file_path
-
-    return example_config_file_path
 
 
 @pytest.fixture
@@ -160,9 +136,7 @@ def del_added_vars_from_config_file(path: Path) -> None:
 
 
 @pytest.fixture
-def config_vars_set(
-    github_config_file_path: Path,
-) -> Vars:
+def config_vars_set() -> Vars:
     """Returns the object full of config variables."""
 
-    return Vars(github_config_file_path)
+    return Vars(FILE_VARS)
