@@ -1,17 +1,16 @@
-# """Using system ping command hosts checking."""
-#
+"""Using system ping command hosts checking."""
+
 import pytest
 
 from app.audit import AuditShields
 from app.dirs import DIR_ROOT
 from app.vars import Vars
 
-github_rootdir = "/home/runner/work/CheckServer/CheckServer"
+GITHUB_ROOTDIR = "/home/runner/work/CheckServer/CheckServer"
 
 
 @pytest.mark.skipif(
-    github_rootdir in f"{DIR_ROOT}",
-    reason="Denied to ping from GitHub"
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
 )
 def test_base_ping_settings_work_fine(config_vars_set: Vars) -> None:
     """Checks the project's ping job using always in touch server."""
