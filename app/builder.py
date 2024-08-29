@@ -17,6 +17,10 @@ def glue_scripts(
                 for line in lines:
                     if "app." in line or '"""' in line:
                         continue
+                    if "FILE_VARS.is_file():" in line:
+                        continue
+                    if '"example_vars.ini"' in line:
+                        continue
                     if "FILE_VARS = DIR_APP / " in line:
                         line = line.replace("DIR_APP / ", "")
                     if "__name__" in line:
