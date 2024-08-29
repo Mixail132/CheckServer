@@ -160,12 +160,9 @@ def del_added_vars_from_config_file(path: Path) -> None:
 
 
 @pytest.fixture
-def config_vars(
+def config_vars_set(
     github_config_file_path: Path,
 ) -> Vars:
     """Returns the object full of config variables."""
 
-    config_path = github_config_file_path
-    config_vars = Vars(config_path)
-
-    return config_vars
+    return Vars(github_config_file_path)
