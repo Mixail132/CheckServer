@@ -91,9 +91,11 @@ class AuditShields:
             text = f"Alarm!\n{text}"
 
             viber_sender = MyViberBot()
-            if viber_sender.check_viber_bot_exists() is not None:
+            viberbot_is_used = viber_sender.check_viber_bot_set()
+            if viberbot_is_used:
                 viber_sender.send_series_viber_messages(text)
 
             telegram_sender = MyTelegramBot()
-            if telegram_sender.check_telegram_bot_exists() is not None:
+            telebot_is_used = telegram_sender.check_telegram_bot_set()
+            if telebot_is_used:
                 telegram_sender.send_series_telegram_messages(text)
