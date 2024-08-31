@@ -6,8 +6,18 @@ import pytest
 
 from app.dirs import DIR_APP, DIR_ROOT, GITHUB_ROOTDIR
 from app.vars import Vars
+from app.viber import MyViberBot
 
 
+def skip_condition():
+    """Skips the test if the bot is not used."""
+    test_viberbot = MyViberBot()
+    bot_in_use_var = test_viberbot.set
+    bot_in_use = ast.literal_eval(bot_in_use_var)
+    return not bot_in_use
+
+
+@pytest.mark.skipif(skip_condition(), reason="The bot is not used")
 def test_bot_viber_configs_exist(config_vars_set: Vars):
     """Checks whether all the Viber bot config variables exist."""
 

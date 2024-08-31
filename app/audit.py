@@ -87,15 +87,18 @@ class AuditShields:
     @staticmethod
     def send_alarm_messages(text: str) -> None:
         """Sends the alarm message to proper Telegram and Viber users."""
-        if text:
+        telegram_sender = MyTelegramBot()
+        viber_sender = MyViberBot()
+
+        if_any_bot = any([telegram_sender.set, viber_sender.set])
+
+        if text and if_any_bot:
             text = f"Alarm!\n{text}"
 
-            viber_sender = MyViberBot()
             viberbot_is_used = viber_sender.check_viber_bot_set()
             if viberbot_is_used:
                 viber_sender.send_series_viber_messages(text)
 
-            telegram_sender = MyTelegramBot()
             telebot_is_used = telegram_sender.check_telegram_bot_set()
             if telebot_is_used:
                 telegram_sender.send_series_telegram_messages(text)
