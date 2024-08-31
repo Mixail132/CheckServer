@@ -1,5 +1,7 @@
 """ Sending the message to the Viberbot users. """
 
+import ast
+
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
 from viberbot.api.messages.text_message import TextMessage
@@ -9,23 +11,30 @@ from app.vars import Vars
 
 viber_vars = Vars(FILE_VARS)
 
-VIBERBOT_NAME = viber_vars.viber_configs["VIBERBOT_NAME"]
-VIBERBOT_AVATAR = viber_vars.viber_configs["VIBERBOT_AVATAR"]
-VIBERBOT_TOKEN = viber_vars.viber_configs["VIBERBOT_TOKEN"]
-
 
 class MyViberBot:
     """Viber bot class."""
 
     def __init__(self):
         """Initializes the bot."""
+        self.admin = viber_vars.viber_users["Admin"]
+        self.name = viber_vars.viber_configs["VIBERBOT_NAME"]
+        self.avatar = viber_vars.viber_configs["VIBERBOT_AVATAR"]
+        self.token = viber_vars.viber_configs["VIBERBOT_TOKEN"]
+        self.set = viber_vars.viber_configs["VIBERBOT_SET"]
 
         bot_config = BotConfiguration(
-            name=VIBERBOT_NAME,
-            avatar=VIBERBOT_AVATAR,
-            auth_token=VIBERBOT_TOKEN,
+            name=self.name,
+            avatar=self.avatar,
+            auth_token=self.token,
         )
         self.viber = Api(bot_config)
+
+    def check_viber_bot_exists(self) -> bool | None:
+        """Checks if the bot exists and set."""
+        if ast.literal_eval(self.set) and self.admin:
+            return True
+        return None
 
     def send_one_viber_message(self, user_id_: str, alarm_msg_: str) -> bool:
         """Sends a message to a single Viber bot user."""
@@ -51,8 +60,8 @@ class MyViberBot:
                         for _id, name in viber_vars.viber_users.items()
                     }
                     bot_admin = viber_vars.viber_users["Admin"]
-                    byby_message = f"{recipients[user_id]} has left this chat."
-                    byby_msg = TextMessage(text=byby_message)
+                    vb_message = f"{recipients[user_id]} has left this chat."
+                    byby_msg = TextMessage(text=vb_message)
                     self.viber.send_messages(bot_admin, [byby_msg])
                     del recipients, bot_admin
                     continue
@@ -61,4 +70,5 @@ class MyViberBot:
 if __name__ == "__main__":
     viberbot_admin = viber_vars.viber_users["Admin"]
     viber_sender = MyViberBot()
-    viber_sender.send_one_viber_message(viberbot_admin, "Check the bot!")
+    if viber_sender.check_viber_bot_exists() is not None:
+        viber_sender.send_one_viber_message(viberbot_admin, "Check the bot!")
