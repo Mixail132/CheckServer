@@ -20,7 +20,6 @@ jobs:
         pip install -r requirements.txt
     - name: 🔥 Launching pytest
       run: |
-        ping -c 3 www.github.com
         python -m pytest --cache-clear
     - name: 🔥 Analysing the code with pylint
       run: |
