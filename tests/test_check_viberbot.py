@@ -27,4 +27,3 @@ def test_bot_viber_configs_exist(config_vars_set: Vars):
 
     bot_avatar = vars_.viber_configs["VIBERBOT_AVATAR"]
     assert (DIR_APP / bot_avatar).is_file()
-
