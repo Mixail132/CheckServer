@@ -31,14 +31,11 @@ class MyTelegramBot:
 
     def check_telegram_bot_exists(self) -> User | None:
         """Checks if the bot exists.."""
-        bot_in_use = self.check_telegram_bot_set()
-        if bot_in_use:
-            try:
-                get_bot = self.bot.get_me()
-            except ApiTelegramException:
-                get_bot = None
-        else:
+        try:
+            get_bot = self.bot.get_me()
+        except ApiTelegramException:
             get_bot = None
+
         return get_bot
 
     def send_one_telegram_message(self, user_id_, alarm_msg_: str) -> bool:
