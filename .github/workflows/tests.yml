@@ -20,7 +20,7 @@ jobs:
         pip install -r requirements.txt
     - name: 🔥 Launching pytest
       run: |
-        python -m pytest --cache-clear
+        python -m pytest -с .github/settings/pytest.ini
     - name: 🔥 Analysing the code with pylint
       run: |
         pylint --rcfile=.github/settings/.pylintrc $(git ls-files '*.py')
