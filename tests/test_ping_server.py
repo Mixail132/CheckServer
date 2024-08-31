@@ -7,9 +7,9 @@ from app.dirs import DIR_ROOT, GITHUB_ROOTDIR
 from app.vars import Vars
 
 
-# @pytest.mark.skipif(
-#     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
-# )
+@pytest.mark.skipif(
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
+)
 def test_base_ping_settings_work_fine(config_vars_set: Vars) -> None:
     """Checks the project's ping job using always in touch server."""
 
