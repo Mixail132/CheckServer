@@ -1,4 +1,4 @@
-"""Telegram got checking."""
+"""Telegram bot checking."""
 
 import pytest
 from telebot.types import User
@@ -8,13 +8,29 @@ from app.telegram import MyTelegramBot
 from app.vars import Vars
 
 
+def test_telegram_bot_configs_exist(config_vars_set: Vars):
+    """Checks whether all the Telegram bot config variables exist."""
+
+    vars_ = config_vars_set
+
+    assert vars_.telegram_configs["TELEGRAMBOT_NAME"]
+    assert vars_.telegram_configs["TELEGRAMBOT_TOKEN"]
+    assert vars_.telegram_configs["TELEGRAMBOT_URL"]
+    assert vars_.telegram_configs["TELEGRAMBOT_SET"]
+    assert vars_.telegram_users["Admin"]
+
+
 @pytest.mark.skipif(
     GITHUB_ROOTDIR in f"{DIR_ROOT}",
     reason="Denied to send requests from GitHub.",
 )
 def test_telegram_bot_exists(config_vars_set: Vars):
-    """Checks weather the Telegrab bot exists."""
+    """Checks whether the Telegram bot exists."""
     test_bot = MyTelegramBot()
+
+    bot_set = test_bot.check_telegram_bot_set()
+    assert bot_set is True
+
     bot_exists = test_bot.check_telegram_bot_exists()
     err_msg = "Telegram bot does not exist."
 
