@@ -57,7 +57,8 @@ class MyTelegramBot:
 
 
 if __name__ == "__main__":
-    check_bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
-    admin = telegram_vars.telegram_users["Admin"]
-    check_bot.send_message(admin, "The bot checking!")
-    print(check_bot.get_me())
+    telegram_bot_admin = telegram_vars.telegram_users["Admin"]
+    telegram_sender = MyTelegramBot()
+    telegram_sender.send_one_telegram_message(
+        telegram_bot_admin, "Check the bot!"
+    )
