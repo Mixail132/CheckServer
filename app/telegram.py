@@ -23,9 +23,16 @@ class MyTelegramBot:
         self.token = telegram_vars.telegram_configs["TELEGRAMBOT_TOKEN"]
         self.bot = telebot.TeleBot(self.token)
 
-    def check_telegram_bot_exists(self) -> User | None:
-        """Checks if the bot exists and set."""
+    def check_telegram_bot_set(self) -> bool:
+        """Checks if the bot is in use."""
         if ast.literal_eval(self.set) and self.admin:
+            return True
+        return False
+
+    def check_telegram_bot_exists(self) -> User | None:
+        """Checks if the bot exists.."""
+        bot_in_use = self.check_telegram_bot_set()
+        if bot_in_use:
             try:
                 get_bot = self.bot.get_me()
             except ApiTelegramException:
@@ -63,7 +70,7 @@ class MyTelegramBot:
 if __name__ == "__main__":
     telegram_bot_admin = telegram_vars.telegram_users["Admin"]
     telegram_sender = MyTelegramBot()
-    if telegram_sender.check_telegram_bot_exists() is not None:
+    if telegram_sender.check_telegram_bot_set() is not None:
         telegram_sender.send_one_telegram_message(
             telegram_bot_admin, "Check the bot!"
         )

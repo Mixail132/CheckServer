@@ -30,11 +30,11 @@ class MyViberBot:
         )
         self.viber = Api(bot_config)
 
-    def check_viber_bot_exists(self) -> bool | None:
-        """Checks if the bot exists and set."""
+    def check_viber_bot_set(self) -> bool:
+        """Checks if the bot is in use."""
         if ast.literal_eval(self.set) and self.admin:
             return True
-        return None
+        return False
 
     def send_one_viber_message(self, user_id_: str, alarm_msg_: str) -> bool:
         """Sends a message to a single Viber bot user."""
@@ -70,5 +70,5 @@ class MyViberBot:
 if __name__ == "__main__":
     viberbot_admin = viber_vars.viber_users["Admin"]
     viber_sender = MyViberBot()
-    if viber_sender.check_viber_bot_exists() is not None:
+    if viber_sender.check_viber_bot_set() is not None:
         viber_sender.send_one_viber_message(viberbot_admin, "Check the bot!")
