@@ -1,5 +1,7 @@
 """ Sending the message to the Telegram users. """
 
+import ast
+
 import telebot
 from requests.exceptions import ConnectTimeout
 from telebot.apihelper import ApiTelegramException
@@ -9,7 +11,6 @@ from app.dirs import FILE_VARS
 from app.vars import Vars
 
 telegram_vars = Vars(FILE_VARS)
-TELEGRAMBOT_TOKEN = telegram_vars.telegram_configs["TELEGRAMBOT_TOKEN"]
 
 
 class MyTelegramBot:
@@ -17,17 +18,20 @@ class MyTelegramBot:
 
     def __init__(self):
         """Initializes the bot."""
-        self.token = TELEGRAMBOT_TOKEN
-        self.bot = telebot.TeleBot(self.token)
         self.admin = telegram_vars.telegram_users["Admin"]
+        self.set = telegram_vars.telegram_configs["TELEGRAMBOT_SET"]
+        self.token = telegram_vars.telegram_configs["TELEGRAMBOT_TOKEN"]
+        self.bot = telebot.TeleBot(self.token)
 
     def check_telegram_bot_exists(self) -> User | None:
-        """Checks if the bot exists."""
-        try:
-            get_bot = self.bot.get_me()
-        except ApiTelegramException:
+        """Checks if the bot exists and set."""
+        if ast.literal_eval(self.set) and self.admin:
+            try:
+                get_bot = self.bot.get_me()
+            except ApiTelegramException:
+                get_bot = None
+        else:
             get_bot = None
-
         return get_bot
 
     def send_one_telegram_message(self, user_id_, alarm_msg_: str) -> bool:
@@ -51,13 +55,15 @@ class MyTelegramBot:
                     user_who_blocked_bot = [
                         key for key, val in telegram_users if val == user
                     ][0]
-                    message = f"{user_who_blocked_bot} has blocked this bot!"
-                    self.send_one_telegram_message(self.admin, message)
+                    tm_msg = f"{user_who_blocked_bot} has blocked this bot!"
+                    self.send_one_telegram_message(self.admin, tm_msg)
                 continue
 
 
 if __name__ == "__main__":
-    check_bot = telebot.TeleBot(TELEGRAMBOT_TOKEN)
-    admin = telegram_vars.telegram_users["Admin"]
-    check_bot.send_message(admin, "The bot checking!")
-    print(check_bot.get_me())
+    telegram_bot_admin = telegram_vars.telegram_users["Admin"]
+    telegram_sender = MyTelegramBot()
+    if telegram_sender.check_telegram_bot_exists() is not None:
+        telegram_sender.send_one_telegram_message(
+            telegram_bot_admin, "Check the bot!"
+        )
