@@ -1,4 +1,4 @@
-""" Executing the main logic of the app. """
+"""Performing the main logic of the app. """
 
 import subprocess
 import sys
@@ -17,6 +17,8 @@ class AuditShields:
         self.vars: Vars = config_vars
         self.shields_out: dict = {}
         self.messages_sent: dict = {}
+        self.telegram_sender: MyTelegramBot = MyTelegramBot()
+        self.viber_sender: MyViberBot = MyViberBot()
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
@@ -80,25 +82,39 @@ class AuditShields:
             if not status:
                 continue
             if not self.vars.sendings[shield]:
-                self.vars.sendings[shield] = True
                 message_text += f"{self.vars.messages[shield]} \n"
         return message_text
 
-    @staticmethod
-    def send_alarm_messages(text: str) -> None:
+    def send_alarm_messages(self, text: str) -> bool:
         """Sends the alarm message to proper Telegram and Viber users."""
-        telegram_sender = MyTelegramBot()
-        viber_sender = MyViberBot()
 
-        if_any_bot = any([telegram_sender.set, viber_sender.set])
+        if_any_bot = any([self.telegram_sender.set, self.viber_sender.set])
+        messages_is_sent = []
 
         if text and if_any_bot:
+
             text = f"Alarm!\n{text}"
 
-            viberbot_is_used = viber_sender.check_viber_bot_set()
+            viberbot_is_used = self.viber_sender.check_viber_bot_set()
             if viberbot_is_used:
-                viber_sender.send_series_viber_messages(text)
+                sent = self.viber_sender.send_series_viber_messages(text)
+                messages_is_sent.append(sent)
 
-            telebot_is_used = telegram_sender.check_telegram_bot_set()
+            telebot_is_used = self.telegram_sender.check_telegram_bot_set()
             if telebot_is_used:
-                telegram_sender.send_series_telegram_messages(text)
+                sent = self.telegram_sender.send_series_telegram_messages(text)
+                messages_is_sent.append(sent)
+
+            any_messages_is_sent = any(messages_is_sent)
+            if any_messages_is_sent:
+                return True
+
+        return False
+
+    def set_sending_status(self) -> None:
+        """Sets a sending status if an alarm message is sent."""
+        for shield, status in self.shields_out.items():
+            if not status:
+                continue
+            if not self.vars.sendings[shield]:
+                self.vars.sendings[shield] = True
