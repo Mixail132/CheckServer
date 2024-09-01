@@ -32,8 +32,10 @@ class MyViberBot:
 
     def check_viber_bot_set(self) -> bool:
         """Checks if the bot is in use."""
-        if ast.literal_eval(self.set) and self.admin:
+        bot_in_use = ast.literal_eval(self.set)
+        if bot_in_use and self.admin:
             return True
+
         return False
 
     def send_one_viber_message(self, user_id_: str, alarm_msg_: str) -> bool:
@@ -46,12 +48,15 @@ class MyViberBot:
 
         return True
 
-    def send_series_viber_messages(self, alarm_message: str) -> None:
+    def send_series_viber_messages(self, alarm_message: str) -> bool:
         """Sends a message to a series of Viber bot users."""
-
+        sending_statuses: list = [bool, bool]
         for user_id in viber_vars.viber_users.values():
+            sending_status: bool = False
             try:
-                self.send_one_viber_message(user_id, alarm_message)
+                sending_status = self.send_one_viber_message(
+                    user_id, alarm_message
+                )
             # pylint: disable=W0718
             except Exception as ex:
                 if "notSubscribed" in ex.args[0]:
@@ -65,6 +70,9 @@ class MyViberBot:
                     self.viber.send_messages(bot_admin, [byby_msg])
                     del recipients, bot_admin
                     continue
+            sending_statuses.append(sending_status)
+
+        return any(sending_statuses)
 
 
 if __name__ == "__main__":

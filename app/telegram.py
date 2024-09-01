@@ -25,8 +25,10 @@ class MyTelegramBot:
 
     def check_telegram_bot_set(self) -> bool:
         """Checks if the bot is in use."""
-        if ast.literal_eval(self.set) and self.admin:
+        bot_in_use = ast.literal_eval(self.set)
+        if bot_in_use and self.admin:
             return True
+
         return False
 
     def check_telegram_bot_exists(self) -> User | None:
@@ -47,12 +49,14 @@ class MyTelegramBot:
 
         return True
 
-    def send_series_telegram_messages(self, alarm_message: str) -> None:
+    def send_series_telegram_messages(self, alarm_message: str) -> bool:
         """Sends a message to a series of Telegram bot users."""
+        sending_statuses: list = [bool, bool]
         for user in telegram_vars.telegram_users.values():
             try:
-                self.send_one_telegram_message(user, alarm_message)
-
+                sending_status = self.send_one_telegram_message(
+                    user, alarm_message
+                )
             except ApiTelegramException as err:
                 if "bot was blocked by the user" in err.args[0]:
                     telegram_users = telegram_vars.telegram_users.items()
@@ -62,6 +66,9 @@ class MyTelegramBot:
                     tm_msg = f"{user_who_blocked_bot} has blocked this bot!"
                     self.send_one_telegram_message(self.admin, tm_msg)
                 continue
+            sending_statuses.append(sending_status)
+
+        return any(sending_statuses)
 
 
 if __name__ == "__main__":
