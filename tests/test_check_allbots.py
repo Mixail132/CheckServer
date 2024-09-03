@@ -1,6 +1,9 @@
 """Telegram and Viber bots checking."""
 
+import pytest
+
 from app.audit import AuditShields
+from app.dirs import DIR_ROOT, GITHUB_ROOTDIR
 from app.telegram import MyTelegramBot
 from app.vars import Vars
 from app.viber import MyViberBot
@@ -23,6 +26,9 @@ def test_one_of_bots_in_use():
     assert any([telebot_in_use, viberbot_in_use]), err_msg
 
 
+@pytest.mark.skipif(
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
+)
 def test_alarm_messages_right_and_sent(never_reached_hosts: Vars) -> None:
     """
     Checks all the test hosts are unreached.
@@ -35,11 +41,9 @@ def test_alarm_messages_right_and_sent(never_reached_hosts: Vars) -> None:
     for net in ["WIFI", "DLAN", "INET"]:
         if not auditor.is_network_out("INET"):
             power_off_shields = auditor.check_shields(net)
-
             assert True in power_off_shields.values()
 
     result_message = auditor.form_alarm_message()
-
     for shield in all_vars.hosts.keys():
         if "SOURCE" in shield:
             continue
@@ -50,7 +54,5 @@ def test_alarm_messages_right_and_sent(never_reached_hosts: Vars) -> None:
         for hosts in all_vars.hosts.values()
         if "IN_TOUCH" not in hosts.keys()
     ]
-
     all_hosts_number = sum(len(x) for x in all_hosts_list)
-
     assert auditor.pinged_hosts == all_hosts_number
