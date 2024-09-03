@@ -1,5 +1,6 @@
 """Data for testing."""
 
+import ast
 import re
 from pathlib import Path
 
@@ -140,3 +141,22 @@ def config_vars_set() -> Vars:
     """Returns the object full of config variables."""
 
     return Vars(FILE_VARS)
+
+
+@pytest.fixture
+def never_reached_hosts() -> Vars:
+    """
+    Returns the config variables object
+    where all the IP addresses will never be reached.
+    """
+
+    all_vars = Vars(FILE_VARS)
+    all_hosts = str(all_vars.hosts)
+
+    any_host = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
+    never_reached_host = "192.0.2.1"
+    all_vars_hosts = re.sub(any_host, never_reached_host, all_hosts)
+
+    all_vars.hosts = ast.literal_eval(all_vars_hosts)
+
+    return all_vars
