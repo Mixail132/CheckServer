@@ -27,7 +27,7 @@ class AuditShields:
         command = [
             "ping",
             "-n" if sys.platform == "win32" else "-c",
-            "3",
+            "2",
             ip_address,
         ]
 
