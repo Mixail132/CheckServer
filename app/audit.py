@@ -18,8 +18,8 @@ class AuditShields:
         self.pinged_hosts: int = 0
         self.power_off_shields: dict = {}
         self.messages_sent: dict = {}
-        self.telegram_sender: MyTelegramBot = MyTelegramBot()
-        self.viber_sender: MyViberBot = MyViberBot()
+        self.telegram_sender = MyTelegramBot(self.vars)
+        self.viber_sender = MyViberBot(self.vars)
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
@@ -107,8 +107,8 @@ class AuditShields:
                 sent = self.telegram_sender.send_series_telegram_messages(text)
                 messages_is_sent.append(sent)
 
-            any_messages_is_sent = any(messages_is_sent)
-            if any_messages_is_sent:
+            any_message_is_sent = any(messages_is_sent)
+            if any_message_is_sent:
                 return True
 
         return False
