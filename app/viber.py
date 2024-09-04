@@ -9,19 +9,19 @@ from viberbot.api.messages.text_message import TextMessage
 from app.dirs import FILE_VARS
 from app.vars import Vars
 
-viber_vars = Vars(FILE_VARS)
-
 
 class MyViberBot:
     """Viber bot class."""
 
-    def __init__(self):
+    def __init__(self, config_vars: Vars) -> None:
         """Initializes the bot."""
-        self.admin = viber_vars.viber_users["Admin"]
-        self.name = viber_vars.viber_configs["VIBERBOT_NAME"]
-        self.avatar = viber_vars.viber_configs["VIBERBOT_AVATAR"]
-        self.token = viber_vars.viber_configs["VIBERBOT_TOKEN"]
-        self.set = viber_vars.viber_configs["VIBERBOT_SET"]
+
+        self.admin = config_vars.viber_users["Admin"]
+        self.avatar = config_vars.viber_configs["VIBERBOT_AVATAR"]
+        self.name = config_vars.viber_configs["VIBERBOT_NAME"]
+        self.set = config_vars.viber_configs["VIBERBOT_SET"]
+        self.token = config_vars.viber_configs["VIBERBOT_TOKEN"]
+        self.users = config_vars.viber_users
 
         bot_config = BotConfiguration(
             name=self.name,
@@ -51,7 +51,7 @@ class MyViberBot:
     def send_series_viber_messages(self, alarm_message: str) -> bool:
         """Sends a message to a series of Viber bot users."""
         sending_statuses: list = [bool, bool]
-        for user_id in viber_vars.viber_users.values():
+        for user_id in self.users.values():
             sending_status: bool = False
             try:
                 sending_status = self.send_one_viber_message(
@@ -61,14 +61,12 @@ class MyViberBot:
             except Exception as ex:
                 if "notSubscribed" in ex.args[0]:
                     recipients = {
-                        name: _id
-                        for _id, name in viber_vars.viber_users.items()
+                        name: _id for _id, name in self.users.items()
                     }
-                    bot_admin = viber_vars.viber_users["Admin"]
                     vb_message = f"{recipients[user_id]} has left this chat."
                     byby_msg = TextMessage(text=vb_message)
-                    self.viber.send_messages(bot_admin, [byby_msg])
-                    del recipients, bot_admin
+                    self.viber.send_messages(self.admin, [byby_msg])
+                    del recipients, self.admin
                     continue
             sending_statuses.append(sending_status)
 
@@ -76,7 +74,8 @@ class MyViberBot:
 
 
 if __name__ == "__main__":
-    viberbot_admin = viber_vars.viber_users["Admin"]
-    viber_sender = MyViberBot()
+    all_vars_v = Vars(FILE_VARS)
+    viber_sender = MyViberBot(all_vars_v)
+    viberbot_admin = viber_sender.admin
     if viber_sender.check_viber_bot_set() is not None:
         viber_sender.send_one_viber_message(viberbot_admin, "Check the bot!")
