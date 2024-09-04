@@ -144,7 +144,7 @@ def config_vars_set() -> Vars:
 
 
 @pytest.fixture
-def never_reached_hosts() -> Vars:
+def bad_hosts_vars() -> Vars:
     """
     Returns the config variables object
     where all the IP addresses will never be reached.
@@ -155,8 +155,8 @@ def never_reached_hosts() -> Vars:
 
     any_host = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
     never_reached_host = "192.0.2.1"
-    all_vars_hosts = re.sub(any_host, never_reached_host, all_hosts)
+    bad_hosts = re.sub(any_host, never_reached_host, all_hosts)
 
-    all_vars.hosts = ast.literal_eval(all_vars_hosts)
+    all_vars.hosts = ast.literal_eval(bad_hosts)
 
     return all_vars

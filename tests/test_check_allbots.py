@@ -29,14 +29,13 @@ def test_one_of_bots_in_use():
 @pytest.mark.skipif(
     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
 )
-def test_alarm_messages_right_and_sent(never_reached_hosts: Vars) -> None:
+def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     """
     Checks all the test hosts are unreached.
     Checks the result message contains all the information needed.
     Checks the ping command number is equal the hosts number.
     """
-    all_vars = never_reached_hosts
-    auditor = AuditShields(all_vars)
+    auditor = AuditShields(bad_hosts_vars)
 
     for net in ["WIFI", "DLAN", "INET"]:
         if not auditor.is_network_out("INET"):
@@ -44,14 +43,14 @@ def test_alarm_messages_right_and_sent(never_reached_hosts: Vars) -> None:
             assert True in power_off_shields.values()
 
     result_message = auditor.form_alarm_message()
-    for shield in all_vars.hosts.keys():
+    for shield in bad_hosts_vars.hosts.keys():
         if "SOURCE" in shield:
             continue
-        assert all_vars.messages[shield] in result_message
+        assert bad_hosts_vars.messages[shield] in result_message
 
     all_hosts_list = [
         hosts
-        for hosts in all_vars.hosts.values()
+        for hosts in bad_hosts_vars.hosts.values()
         if "IN_TOUCH" not in hosts.keys()
     ]
     all_hosts_number = sum(len(x) for x in all_hosts_list)
