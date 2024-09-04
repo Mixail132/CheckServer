@@ -9,11 +9,10 @@ from app.vars import Vars
 from app.viber import MyViberBot
 
 
-def test_one_of_bots_in_use():
+def test_one_of_bots_in_use(
+    test_telebot: MyTelegramBot, test_viberbot: MyViberBot
+) -> None:
     """Checks whether at least one of two bots set as in use."""
-
-    test_telebot = MyTelegramBot()
-    test_viberbot = MyViberBot()
 
     telebot_in_use = test_telebot.check_telegram_bot_set()
     viberbot_in_use = test_viberbot.check_viber_bot_set()
@@ -47,11 +46,21 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
         if "SOURCE" in shield:
             continue
         assert bad_hosts_vars.messages[shield] in result_message
+        assert bad_hosts_vars.sendings[shield] is False
+
+    auditor.set_sending_status()
+    for shield in bad_hosts_vars.sendings.keys():
+        if "SOURCE" in shield:
+            continue
+        assert bad_hosts_vars.sendings[shield] is True
 
     all_hosts_list = [
         hosts
         for hosts in bad_hosts_vars.hosts.values()
         if "IN_TOUCH" not in hosts.keys()
     ]
-    all_hosts_number = sum(len(x) for x in all_hosts_list)
+    all_hosts_number = sum(len(host) for host in all_hosts_list)
     assert auditor.pinged_hosts == all_hosts_number
+
+    any_message_is_sent = auditor.send_alarm_messages("Testing!")
+    assert any_message_is_sent is True
