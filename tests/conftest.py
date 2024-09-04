@@ -7,7 +7,9 @@ from pathlib import Path
 import pytest
 
 from app.dirs import DIR_APP, FILE_VARS
+from app.telegram import MyTelegramBot
 from app.vars import Vars
+from app.viber import MyViberBot
 
 
 @pytest.fixture
@@ -144,13 +146,13 @@ def config_vars_set() -> Vars:
 
 
 @pytest.fixture
-def bad_hosts_vars() -> Vars:
+def bad_hosts_vars(config_vars_set) -> Vars:
     """
     Returns the config variables object
     where all the IP addresses will never be reached.
     """
 
-    all_vars = Vars(FILE_VARS)
+    all_vars = config_vars_set
     all_hosts = str(all_vars.hosts)
 
     any_host = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
@@ -159,4 +161,30 @@ def bad_hosts_vars() -> Vars:
 
     all_vars.hosts = ast.literal_eval(bad_hosts)
 
+    viber_admin = {
+        vb_user: vb_id
+        for vb_user, vb_id in all_vars.viber_users.items()
+        if vb_user == "Admin"
+    }
+    telegram_admin = {
+        tg_user: tg_id
+        for tg_user, tg_id in all_vars.telegram_users.items()
+        if tg_user == "Admin"
+    }
+
+    all_vars.viber_users = viber_admin
+    all_vars.telegram_users = telegram_admin
+
     return all_vars
+
+
+@pytest.fixture
+def test_telebot(config_vars_set: Vars) -> MyTelegramBot:
+    """Return the test bot object."""
+    return MyTelegramBot(config_vars_set)
+
+
+@pytest.fixture
+def test_viberbot(config_vars_set: Vars) -> MyViberBot:
+    """Return the test bot object."""
+    return MyViberBot(config_vars_set)
