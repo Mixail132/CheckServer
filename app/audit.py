@@ -91,7 +91,7 @@ class AuditShields:
         """Sends the alarm message to proper Telegram and Viber users."""
 
         if_any_bot = any([self.telegram_sender.set, self.viber_sender.set])
-        messages_is_sent = []
+        messages_are_sent = []
 
         if text and if_any_bot:
 
@@ -100,14 +100,14 @@ class AuditShields:
             viberbot_is_used = self.viber_sender.check_viber_bot_set()
             if viberbot_is_used:
                 sent = self.viber_sender.send_series_viber_messages(text)
-                messages_is_sent.append(sent)
+                messages_are_sent.append(sent)
 
             telebot_is_used = self.telegram_sender.check_telegram_bot_set()
             if telebot_is_used:
                 sent = self.telegram_sender.send_series_telegram_messages(text)
-                messages_is_sent.append(sent)
+                messages_are_sent.append(sent)
 
-            any_message_is_sent = any(messages_is_sent)
+            any_message_is_sent = any(messages_are_sent)
             if any_message_is_sent:
                 return True
 
