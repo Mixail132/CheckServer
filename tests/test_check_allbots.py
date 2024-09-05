@@ -75,4 +75,3 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
 
     twice_sent_message = auditor.send_alarm_messages(rematch_message)
     assert twice_sent_message is False
-
