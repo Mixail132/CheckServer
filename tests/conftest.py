@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 
 import pytest
+from pytest import FixtureRequest
 
 from app.dirs import DIR_APP, FILE_VARS
 from app.telegram import MyTelegramBot
@@ -66,7 +67,7 @@ def vars_read_for_work(
 
 @pytest.fixture(params=["original_vars_number", "extended_vars_number"])
 def total_config_file_path(
-    request,
+    request: FixtureRequest,
     extended_config_file_path: Path,
 ) -> Path:
     """Defines a system path to the config file to be tested."""
@@ -146,7 +147,7 @@ def config_vars_set() -> Vars:
 
 
 @pytest.fixture
-def bad_hosts_vars(config_vars_set) -> Vars:
+def bad_hosts_vars(config_vars_set: Vars) -> Vars:
     """
     Returns the config variables object
     where all the IP addresses will never be reached.
@@ -181,10 +182,12 @@ def bad_hosts_vars(config_vars_set) -> Vars:
 @pytest.fixture
 def test_telebot(config_vars_set: Vars) -> MyTelegramBot:
     """Return the test bot object."""
+
     return MyTelegramBot(config_vars_set)
 
 
 @pytest.fixture
 def test_viberbot(config_vars_set: Vars) -> MyViberBot:
     """Return the test bot object."""
+
     return MyViberBot(config_vars_set)
