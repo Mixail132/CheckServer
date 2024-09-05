@@ -16,3 +16,12 @@ def test_config_file_has_completely_read(
         assert var in vars_read_for_test
 
     assert len(vars_read_for_work) == len(vars_read_for_test)
+
+
+def test_there_are_no_unpair_brackets(config_file_as_a_text) -> None:
+    """Compares open and close square brackets quantity."""
+
+    open_brackets = config_file_as_a_text.count("[")
+    close_brackets = config_file_as_a_text.count("]")
+
+    assert open_brackets == close_brackets
