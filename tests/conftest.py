@@ -191,3 +191,20 @@ def test_viberbot(config_vars_set: Vars) -> MyViberBot:
     """Return the test bot object."""
 
     return MyViberBot(config_vars_set)
+
+
+@pytest.fixture
+def config_file_as_a_text() -> str:
+    """Reads a config file, returns it as a string."""
+
+    with open(FILE_VARS, "r", encoding="utf-8") as file:
+        config_file_list = []
+        for line in file:
+            if line.startswith(";"):
+                continue
+            if line == "\n":
+                continue
+            config_file_list.append(line.replace("\n", ""))
+        config_file_text = "".join(config_file_list)
+
+    return config_file_text
