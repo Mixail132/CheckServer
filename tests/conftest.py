@@ -204,7 +204,7 @@ def config_file_as_a_text() -> str:
                 continue
             if line == "\n":
                 continue
-            config_file_list.append(line.replace("\n", ""))
+            config_file_list.append(line)
         config_file_text = "".join(config_file_list)
 
     return config_file_text
