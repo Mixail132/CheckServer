@@ -39,28 +39,40 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     for net in ["WIFI", "DLAN", "INET"]:
         if not auditor.is_network_out("INET"):
             power_off_shields = auditor.check_shields(net)
-            assert True in power_off_shields.values()
+            the_values = power_off_shields.values()
+            assert all(the_values) is True
 
     result_message = auditor.form_alarm_message()
+    assert bool(result_message) is True
+
     for shield in bad_hosts_vars.hosts.keys():
         if "SOURCE" in shield:
             continue
         assert bad_hosts_vars.messages[shield] in result_message
         assert bad_hosts_vars.sendings[shield] is False
 
-    auditor.set_sending_status()
-    for shield in bad_hosts_vars.sendings.keys():
-        if "SOURCE" in shield:
-            continue
-        assert bad_hosts_vars.sendings[shield] is True
-
     all_hosts_list = [
         hosts
         for hosts in bad_hosts_vars.hosts.values()
         if "IN_TOUCH" not in hosts.keys()
     ]
+
     all_hosts_number = sum(len(host) for host in all_hosts_list)
     assert auditor.pinged_hosts == all_hosts_number
 
-    any_message_is_sent = auditor.send_alarm_messages("Testing!")
-    assert any_message_is_sent is True
+    once_sent_message = auditor.send_alarm_messages(result_message)
+    assert once_sent_message is True
+
+    auditor.set_sending_status()
+
+    for shield in bad_hosts_vars.sendings.keys():
+        if "SOURCE" in shield:
+            continue
+        assert bad_hosts_vars.sendings[shield] is True
+
+    rematch_message = auditor.form_alarm_message()
+    assert bool(rematch_message) is False
+
+    twice_sent_message = auditor.send_alarm_messages(rematch_message)
+    assert twice_sent_message is False
+
