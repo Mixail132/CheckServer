@@ -6,12 +6,11 @@ from app.vars import Vars
 
 all_vars = Vars(FILE_VARS)
 auditor = AuditShields(all_vars)
-nets_ = ["WIFI", "DLAN", "INET"]
 
 
 while True:
 
-    for net_ in nets_:
+    for net_ in ["WIFI", "DLAN", "INET"]:
         if not auditor.is_network_out(net_):
             auditor.check_shields(net_)
 
