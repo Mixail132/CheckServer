@@ -4,14 +4,15 @@ import ast
 
 import pytest
 
-from app.dirs import DIR_APP, DIR_ROOT, GITHUB_ROOTDIR
+from app.dirs import DIR_APP, DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR
 from app.vars import Vars
 from app.viber import MyViberBot
 
 
-def skip_condition():
+def skip_condition() -> bool:
     """Skips the test if the bot is not used."""
-    test_viberbot = MyViberBot()
+    config_vars = Vars(FILE_VARS)
+    test_viberbot = MyViberBot(config_vars)
     bot_in_use_var = test_viberbot.set
     bot_in_use = ast.literal_eval(bot_in_use_var)
     return not bot_in_use

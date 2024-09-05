@@ -5,21 +5,22 @@ import ast
 import pytest
 from telebot.types import User
 
-from app.dirs import DIR_ROOT, GITHUB_ROOTDIR
+from app.dirs import DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR
 from app.telegram import MyTelegramBot
 from app.vars import Vars
 
 
-def skip_condition():
+def skip_condition() -> bool:
     """Skips the test if the bot is not used."""
-    test_telebot = MyTelegramBot()
+    config_vars = Vars(FILE_VARS)
+    test_telebot = MyTelegramBot(config_vars)
     bot_in_use_var = test_telebot.set
     bot_in_use = ast.literal_eval(bot_in_use_var)
     return not bot_in_use
 
 
 @pytest.mark.skipif(skip_condition(), reason="The bot is not used")
-def test_telegram_bot_configs_exist(config_vars_set: Vars):
+def test_telegram_bot_configs_exist(config_vars_set: Vars) -> None:
     """Checks whether all the Telegram bot config variables exist."""
 
     vars_ = config_vars_set
@@ -35,7 +36,9 @@ def test_telegram_bot_configs_exist(config_vars_set: Vars):
     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub."
 )
 @pytest.mark.skipif(skip_condition(), reason="The bot is not used")
-def test_telegram_bot_exists(config_vars_set: Vars):
+def test_telegram_bot_exists(
+    config_vars_set: Vars, test_telebot: MyTelegramBot
+) -> None:
     """Checks whether the Telegram bot exists."""
 
     vars_ = config_vars_set
@@ -43,9 +46,7 @@ def test_telegram_bot_exists(config_vars_set: Vars):
     if not ast.literal_eval(bot_in_use):
         pytest.skip()
 
-    test_bot = MyTelegramBot()
-
-    bot_exists = test_bot.check_telegram_bot_exists()
+    bot_exists = test_telebot.check_telegram_bot_exists()
     err_msg = "Telegram bot does not exist."
 
     vars_ = config_vars_set

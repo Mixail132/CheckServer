@@ -12,4 +12,7 @@ def test_config_file_has_completely_read(
     for var in vars_read_for_test:
         assert var in vars_read_for_work
 
+    for var in vars_read_for_work:
+        assert var in vars_read_for_test
+
     assert len(vars_read_for_work) == len(vars_read_for_test)
