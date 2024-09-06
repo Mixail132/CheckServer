@@ -40,27 +40,28 @@ def vars_read_for_work(
 ) -> list:
     """Matches variables read from the config file for the project."""
 
-    config_path = total_config_file_path
+    config_vars = Vars(total_config_file_path)
 
-    config_vars = Vars(config_path)
-    allvars_attrs = dir(config_vars)
-    project_vars = []
+    telegram_ids = config_vars.telegram_users.values()
+    viber_ids = config_vars.viber_users.values()
+    telegram_settings = config_vars.telegram_configs.values()
+    viber_settings = config_vars.viber_configs.values()
+    messages = config_vars.messages.values()
+    hosts = [
+        hosts for host in config_vars.hosts.values() for hosts in host.values()
+    ]
+    vars_values = [
+        telegram_ids,
+        viber_ids,
+        telegram_settings,
+        viber_settings,
+        messages,
+        hosts,
+    ]
 
-    for attr in allvars_attrs:
-        if attr.startswith("__"):
-            continue
-        if attr in ("sendings", "read_configs"):
-            continue
-
-        project_vars.append(getattr(config_vars, attr))
-
-    _vars = str(project_vars)
-    vars_values = re.sub(r"'[^']*':", "", _vars, flags=re.DOTALL)
-    vars_values = re.sub(r"[\[\]]|\{|}", "", vars_values)
-    vars_values = re.sub(r"'", "", vars_values)
-    vars_values = re.sub(r"^\s+", "", vars_values)
-    vars_values = re.sub(r",\s+", ",", vars_values)
-    work_vars_values = vars_values.split(",")
+    work_vars_values = [
+        list_items for lists in vars_values for list_items in lists
+    ]
 
     return work_vars_values
 
