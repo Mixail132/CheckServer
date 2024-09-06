@@ -40,7 +40,13 @@ class Vars:
         self.messages = {
             source: configs["MESSAGES"][f"{source}"] for source in self.hosts
         }
-        self.nets = [net for net in nets if net in headers]
+        self.nets = []
+        for header in headers:
+            for net in nets:
+                if net in header:
+                    self.nets.append(net)
+                    break
+        # self.nets = [header for header in headers for net in nets if net in header]
 
 
 if __name__ == "__main__":
