@@ -10,7 +10,7 @@ auditor = AuditShields(all_vars)
 
 while True:
 
-    for net_ in ["WIFI", "DLAN", "INET"]:
+    for net_ in all_vars.nets:
         if not auditor.is_network_out(net_):
             auditor.check_shields(net_)
 
