@@ -5,9 +5,14 @@ If there are no errors in them.
 """
 
 import ipaddress
+import re
+from pathlib import Path
+
+import pytest
 import validators
 
 from app.vars import Vars
+
 
 def test_config_file_has_completely_read(
     vars_read_for_test: list,
@@ -51,24 +56,47 @@ def test_square_brackets_arranged_right(config_file_as_a_text: str) -> None:
 
 
 def test_ip_addresses_are_valid(config_vars_set: Vars) -> None:
-    """Checks for a valid format of all the IP addresses."""
+    """
+    Checks for a valid format of all the IP addresses and urls.
+    """
 
     err_msg = "The configuration file contains invalid host"
 
     hosts = [
         host
-        for host in config_vars_set.hosts.values()
-        for host in host.values()
+        for hosts in config_vars_set.hosts.values()
+        for host in hosts.values()
     ]
     for host in hosts:
-        if host[0].isdigit():
+        ip_mask = re.search(r"(.{1,3}\.){3}", host)
+        if ip_mask:
             try:
                 ip_is_valid = ipaddress.ip_address(host)
             except ValueError:
-                ip_is_valid = False
+                ip_is_valid = None
 
-            assert ip_is_valid, err_msg
+            assert bool(ip_is_valid), err_msg
 
         elif host[0].isalpha():
 
             assert validators.url(f"http://{host}"), err_msg
+
+
+def test_invalid_ip_is_detected(extended_config_file_path: Path) -> None:
+    """
+    Puts an invalid IP to the config file.
+    Checks whether this IP is found.
+    """
+    config_vars_set = Vars(extended_config_file_path)
+
+    hosts = [
+        host
+        for hosts in config_vars_set.hosts.values()
+        for host in hosts.values()
+    ]
+    with pytest.raises(ValueError):
+
+        for host in hosts:
+            ip_mask = re.search(r"(.{1,3}\.){3}", host)
+            if ip_mask:
+                assert ipaddress.ip_address(host)
