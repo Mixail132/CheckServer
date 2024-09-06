@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 import validators
 
+from app.dirs import DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR
 from app.vars import Vars
 
 
@@ -100,3 +101,11 @@ def test_invalid_ip_is_detected(extended_config_file_path: Path) -> None:
             ip_mask = re.search(r"(.{1,3}\.){3}", host)
             if ip_mask:
                 assert ipaddress.ip_address(host)
+
+
+def test_right_config_file_chosen():
+    """Checks whether the right configuration file is used."""
+    if GITHUB_ROOTDIR in str(DIR_ROOT):
+        assert "example_vars.ini" in str(FILE_VARS)
+    else:
+        assert "vars.ini" in str(FILE_VARS)
