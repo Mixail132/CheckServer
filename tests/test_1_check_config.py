@@ -113,10 +113,16 @@ def test_right_config_file_chosen() -> None:
         assert "vars.ini" in str(FILE_VARS)
 
 
-def each_shield_has_a_corresponding_message(config_vars_set: Vars) -> None:
+def test_shields_have_corresponding_messages(config_vars_set: Vars) -> None:
     """Finds a message text that corresponds a certain shield."""
 
     shields = list(config_vars_set.hosts.keys())
     pointers = list(config_vars_set.messages.keys())
 
     assert shields == pointers
+
+
+def test_neded_vars_exist(config_vars_set: Vars) -> None:
+    """Checks if all the necessary variables are collected."""
+
+    assert config_vars_set.nets
