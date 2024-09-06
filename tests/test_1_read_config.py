@@ -1,8 +1,13 @@
 """
 Check weather the configuration variables
 have been completely read from 'ini' file.
+If there are no errors in them.
 """
 
+import ipaddress
+import validators
+
+from app.vars import Vars
 
 def test_config_file_has_completely_read(
     vars_read_for_test: list,
@@ -18,8 +23,8 @@ def test_config_file_has_completely_read(
     assert len(vars_read_for_work) == len(vars_read_for_test)
 
 
-def test_there_are_no_unpair_brackets(config_file_as_a_text: str) -> None:
-    """Compares open and close square brackets quantity."""
+def test_square_brackets_arranged_right(config_file_as_a_text: str) -> None:
+    """Checks whether the brackets are properly arranged."""
 
     open_brackets = config_file_as_a_text.count("[")
     close_brackets = config_file_as_a_text.count("]")
@@ -43,3 +48,27 @@ def test_there_are_no_unpair_brackets(config_file_as_a_text: str) -> None:
         pair_brackets += 1
 
     assert pair_brackets == open_brackets
+
+
+def test_ip_addresses_are_valid(config_vars_set: Vars) -> None:
+    """Checks for a valid format of all the IP addresses."""
+
+    err_msg = "The configuration file contains invalid host"
+
+    hosts = [
+        host
+        for host in config_vars_set.hosts.values()
+        for host in host.values()
+    ]
+    for host in hosts:
+        if host[0].isdigit():
+            try:
+                ip_is_valid = ipaddress.ip_address(host)
+            except ValueError:
+                ip_is_valid = False
+
+            assert ip_is_valid, err_msg
+
+        elif host[0].isalpha():
+
+            assert validators.url(f"http://{host}"), err_msg
