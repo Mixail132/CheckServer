@@ -101,13 +101,17 @@ def extended_config_file_path(example_config_file_path: Path):
 
 
 def add_test_vars_to_config_file(path: Path) -> Path:
-    """Extends the example config file with a few parameters."""
+    """
+    Extends the example config file with a few parameters.
+    Puts an invalid IP address to detect it in a test.
+    """
     with open(path, "r", encoding="utf-8") as file:
         old_file = file.readlines()
 
         for number, line in enumerate(old_file):
-            if "192." in line:
-                added_var = "TEST_999 = 192.168.122.254\n"
+            ip_mask = re.search(r"(\d{1,3}\.){3}", line)
+            if ip_mask:
+                added_var = "TEST_BAD_IP = o99.999.9I.\n"
                 old_file.insert(number + 1, added_var)
                 break
 
