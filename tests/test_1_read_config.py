@@ -103,9 +103,11 @@ def test_invalid_ip_is_detected(extended_config_file_path: Path) -> None:
                 assert ipaddress.ip_address(host)
 
 
-def test_right_config_file_chosen():
+def test_right_config_file_chosen() -> None:
     """Checks whether the right configuration file is used."""
+
     if GITHUB_ROOTDIR in str(DIR_ROOT):
         assert "example_vars.ini" in str(FILE_VARS)
+
     else:
         assert "vars.ini" in str(FILE_VARS)
