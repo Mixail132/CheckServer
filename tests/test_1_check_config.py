@@ -111,3 +111,12 @@ def test_right_config_file_chosen() -> None:
 
     else:
         assert "vars.ini" in str(FILE_VARS)
+
+
+def each_shield_has_a_corresponding_message(config_vars_set: Vars) -> None:
+    """Finds a message text that corresponds a certain shield."""
+
+    shields = list(config_vars_set.hosts.keys())
+    pointers = list(config_vars_set.messages.keys())
+
+    assert shields == pointers
