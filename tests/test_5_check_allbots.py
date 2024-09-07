@@ -36,8 +36,8 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     """
     auditor = AuditShields(bad_hosts_vars)
 
-    for net in ["WIFI", "DLAN", "INET"]:
-        if not auditor.is_network_out("INET"):
+    for net in bad_hosts_vars.nets:
+        if not auditor.is_network_out(net):
             power_off_shields = auditor.check_shields(net)
             the_values = power_off_shields.values()
             assert all(the_values) is True
