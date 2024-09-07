@@ -161,17 +161,24 @@ def bad_hosts_vars(config_vars_set: Vars) -> Vars:
     all_vars = config_vars_set
     all_hosts = str(all_vars.hosts)
 
-    any_host = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
+    any_host = r"(\d{1,3}\.){3}\d{1,3}"
     never_reached_host = "192.0.2.1"
     bad_hosts = re.sub(any_host, never_reached_host, all_hosts)
 
     all_vars.hosts = ast.literal_eval(bad_hosts)
+
+    always_available_host = 'www.google.com'
+    for shield, hosts in all_vars.hosts.items():
+        for name, host in hosts.items():
+            if "IN_TOUCH" in name:
+                hosts[name] = always_available_host
 
     viber_admin = {
         vb_user: vb_id
         for vb_user, vb_id in all_vars.viber_users.items()
         if vb_user == "Admin"
     }
+
     telegram_admin = {
         tg_user: tg_id
         for tg_user, tg_id in all_vars.telegram_users.items()
