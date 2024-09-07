@@ -121,23 +121,34 @@ def test_shields_have_corresponding_messages(config_vars_set: Vars) -> None:
     assert shields == pointers
 
 
-def test_neded_vars_exist(config_vars_set: Vars) -> None:
+def test_needed_vars_exist(config_vars_set: Vars) -> None:
     """Checks if all the necessary variables are collected."""
 
     assert config_vars_set.nets
 
 
-def test_all_network_variables_are_completely_removed(
+def test_all_network_variables_are_completely_set(
     config_file_as_a_text: str, config_vars_set: Vars
 ) -> None:
-    """Checks whether all the network components are complete."""
+    """
+    Checks whether all the network components
+    are completely set in the configuration file.
+    """
 
     project_nets = ["WIFI", "DLAN", "INET"]
     user_nets: list = config_vars_set.nets
-    err_msg = """
-    The network components are not completely
-    removed from the configuration file.
-    """
+
     for net in project_nets:
+
         if net not in user_nets:
-            assert net not in config_file_as_a_text, f"{err_msg} {net}"
+            assert net not in config_file_as_a_text
+
+        elif net in user_nets:
+
+            net_shields = str(config_vars_set.hosts.keys())
+            assert f"{net} SOURCE" in net_shields
+            assert net_shields.count(net) >= 2
+
+            net_messages = str(config_vars_set.messages.keys())
+            assert f"{net} SOURCE" in net_messages
+            assert net_messages.count(net) >= 2
