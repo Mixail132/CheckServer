@@ -3,4 +3,5 @@ ignore = commons.py, try.py
 
 [MESSAGES CONTROL]
 disable = too-few-public-methods,
-          redefined-outer-name
+          redefined-outer-name,
+          too-many-instance-attributes

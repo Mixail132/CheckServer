@@ -40,27 +40,28 @@ def vars_read_for_work(
 ) -> list:
     """Matches variables read from the config file for the project."""
 
-    config_path = total_config_file_path
+    config_vars = Vars(total_config_file_path)
 
-    config_vars = Vars(config_path)
-    allvars_attrs = dir(config_vars)
-    project_vars = []
+    telegram_ids = config_vars.telegram_users.values()
+    viber_ids = config_vars.viber_users.values()
+    telegram_settings = config_vars.telegram_configs.values()
+    viber_settings = config_vars.viber_configs.values()
+    messages = config_vars.messages.values()
+    hosts = [
+        hosts for host in config_vars.hosts.values() for hosts in host.values()
+    ]
+    vars_values = [
+        telegram_ids,
+        viber_ids,
+        telegram_settings,
+        viber_settings,
+        messages,
+        hosts,
+    ]
 
-    for attr in allvars_attrs:
-        if attr.startswith("__"):
-            continue
-        if attr in ("sendings", "read_configs"):
-            continue
-
-        project_vars.append(getattr(config_vars, attr))
-
-    _vars = str(project_vars)
-    vars_values = re.sub(r"'[^']*':", "", _vars, flags=re.DOTALL)
-    vars_values = re.sub(r"[\[\]]|\{|}", "", vars_values)
-    vars_values = re.sub(r"'", "", vars_values)
-    vars_values = re.sub(r"^\s+", "", vars_values)
-    vars_values = re.sub(r",\s+", ",", vars_values)
-    work_vars_values = vars_values.split(",")
+    work_vars_values = [
+        list_items for lists in vars_values for list_items in lists
+    ]
 
     return work_vars_values
 
@@ -160,17 +161,24 @@ def bad_hosts_vars(config_vars_set: Vars) -> Vars:
     all_vars = config_vars_set
     all_hosts = str(all_vars.hosts)
 
-    any_host = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
+    any_host = r"(\d{1,3}\.){3}\d{1,3}"
     never_reached_host = "192.0.2.1"
     bad_hosts = re.sub(any_host, never_reached_host, all_hosts)
 
     all_vars.hosts = ast.literal_eval(bad_hosts)
+
+    always_available_host = "www.google.com"
+    for hosts in all_vars.hosts.values():
+        for name in hosts.keys():
+            if "IN_TOUCH" in name:
+                hosts[name] = always_available_host
 
     viber_admin = {
         vb_user: vb_id
         for vb_user, vb_id in all_vars.viber_users.items()
         if vb_user == "Admin"
     }
+
     telegram_admin = {
         tg_user: tg_id
         for tg_user, tg_id in all_vars.telegram_users.items()
