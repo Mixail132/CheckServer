@@ -69,8 +69,7 @@ def test_ip_addresses_are_valid(config_vars_set: Vars) -> None:
         for host in hosts.values()
     ]
     for host in hosts:
-        ip_mask = re.search(r"(.{1,3}\.){3}", host)
-        if ip_mask:
+        if host[0].isdigit():
             try:
                 ip_is_valid = ipaddress.ip_address(host)
             except ValueError:
