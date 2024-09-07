@@ -126,6 +126,9 @@ def test_needed_vars_exist(config_vars_set: Vars) -> None:
 
     assert config_vars_set.nets
 
+    for values in config_vars_set.hosts.values():
+        assert values
+
 
 def test_all_network_variables_are_completely_set(
     config_file_as_a_text: str, config_vars_set: Vars
