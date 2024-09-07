@@ -167,9 +167,9 @@ def bad_hosts_vars(config_vars_set: Vars) -> Vars:
 
     all_vars.hosts = ast.literal_eval(bad_hosts)
 
-    always_available_host = 'www.google.com'
-    for shield, hosts in all_vars.hosts.items():
-        for name, host in hosts.items():
+    always_available_host = "www.google.com"
+    for hosts in all_vars.hosts.values():
+        for name in hosts.keys():
             if "IN_TOUCH" in name:
                 hosts[name] = always_available_host
 
