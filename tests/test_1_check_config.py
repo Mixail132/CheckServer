@@ -129,15 +129,14 @@ def test_neded_vars_exist(config_vars_set: Vars) -> None:
 
 
 def test_all_network_variables_are_completely_removed(
-        config_file_as_a_text: str,
-        config_vars_set: Vars
+    config_file_as_a_text: str, config_vars_set: Vars
 ) -> None:
     """Checks whether all the network components are complete."""
 
     project_nets = ["WIFI", "DLAN", "INET"]
     user_nets: list = config_vars_set.nets
     err_msg = """
-    The network components are not completely 
+    The network components are not completely
     removed from the configuration file.
     """
     for net in project_nets:
