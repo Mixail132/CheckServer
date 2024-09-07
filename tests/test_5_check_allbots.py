@@ -43,7 +43,7 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
             assert all(the_values) is True
 
     result_message = auditor.form_alarm_message()
-    assert bool(result_message) is True
+    assert result_message
 
     for shield in bad_hosts_vars.hosts.keys():
         if "SOURCE" in shield:
@@ -70,8 +70,8 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
             continue
         assert bad_hosts_vars.sendings[shield] is True
 
-    rematch_message = auditor.form_alarm_message()
-    assert bool(rematch_message) is False
+    rematched_message = auditor.form_alarm_message()
+    assert not rematched_message
 
-    twice_sent_message = auditor.send_alarm_messages(rematch_message)
+    twice_sent_message = auditor.send_alarm_messages(rematched_message)
     assert twice_sent_message is False
