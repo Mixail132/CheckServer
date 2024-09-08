@@ -152,6 +152,10 @@ def test_all_network_variables_are_completely_set(
             assert f"{net} SOURCE" in net_shields
             assert net_shields.count(net) >= 2
 
-            net_messages = str(config_vars_set.alarm_messages.keys())
-            assert f"{net} SOURCE" in net_messages
-            assert net_messages.count(net) >= 2
+            net_alarms = str(config_vars_set.alarm_messages.keys())
+            assert f"{net} SOURCE" in net_alarms
+            assert net_alarms.count(net) >= 2
+
+            net_cancels = str(config_vars_set.cancel_messages.keys())
+            assert f"{net} SOURCE" in net_cancels
+            assert net_cancels.count(net) >= 2

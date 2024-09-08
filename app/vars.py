@@ -41,6 +41,10 @@ class Vars:
             source: configs["ALARM_MESSAGES"][f"{source}"]
             for source in self.hosts
         }
+        self.cancel_messages = {
+            source: configs["CANCEL_MESSAGES"][f"{source}"]
+            for source in self.hosts
+        }
         self.nets = []
         for net in nets:
             for header in headers:
