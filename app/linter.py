@@ -5,7 +5,11 @@ import subprocess
 from app.dirs import DIR_APP, DIR_LINTERS, DIR_TESTS
 
 
-def run_linters():
+def run_linters() -> None:
+    """
+    Executes a series of commands to run linters
+    with certain parameters.
+    """
     commands = (
         [
             "pylint",
