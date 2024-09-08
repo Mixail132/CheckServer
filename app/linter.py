@@ -6,8 +6,6 @@ from app.dirs import DIR_APP, DIR_LINTERS, DIR_TESTS
 
 
 def run_linters():
-    """Launches the linters with their settings."""
-
     commands = (
         [
             "pylint",
@@ -28,8 +26,9 @@ def run_linters():
             "--diff",
             "--config",
             f"{DIR_LINTERS / '.black'}",
-            DIR_APP,
-            DIR_TESTS,
+            f"{DIR_APP}",
+            f"{DIR_TESTS}",
+
         ],
         [
             "mypy",
@@ -39,6 +38,8 @@ def run_linters():
             DIR_TESTS,
         ],
     )
+    """Launches the linters with their settings."""
+
     for command in commands:
         print(
             "\n",
