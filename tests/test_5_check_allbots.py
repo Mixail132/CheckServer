@@ -48,7 +48,7 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     for shield in bad_hosts_vars.hosts.keys():
         if "SOURCE" in shield:
             continue
-        assert bad_hosts_vars.messages[shield] in result_message
+        assert bad_hosts_vars.alarm_messages[shield] in result_message
         assert bad_hosts_vars.sendings[shield] is False
 
     all_hosts_list = [

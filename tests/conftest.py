@@ -46,7 +46,7 @@ def vars_read_for_work(
     viber_ids = config_vars.viber_users.values()
     telegram_settings = config_vars.telegram_configs.values()
     viber_settings = config_vars.viber_configs.values()
-    messages = config_vars.messages.values()
+    messages = config_vars.alarm_messages.values()
     hosts = [
         hosts for host in config_vars.hosts.values() for hosts in host.values()
     ]

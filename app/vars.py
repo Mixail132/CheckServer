@@ -37,8 +37,9 @@ class Vars:
         self.telegram_configs = dict(configs["TELEGRAM_CONFIGS"].items())
         self.viber_configs = dict(configs["VIBER_CONFIGS"].items())
         self.sendings = {source: False for source in self.hosts}
-        self.messages = {
-            source: configs["MESSAGES"][f"{source}"] for source in self.hosts
+        self.alarm_messages = {
+            source: configs["ALARM_MESSAGES"][f"{source}"]
+            for source in self.hosts
         }
         self.nets = []
         for net in nets:
@@ -58,7 +59,7 @@ if __name__ == "__main__":
         all_vars.telegram_configs,
         all_vars.hosts,
         all_vars.sendings,
-        all_vars.messages,
+        all_vars.alarm_messages,
         all_vars.nets,
         sep="\n",
     )

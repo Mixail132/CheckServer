@@ -84,7 +84,7 @@ class AuditShields:
             if not status:
                 continue
             if not self.vars.sendings[shield]:
-                message_text += f"{self.vars.messages[shield]} \n"
+                message_text += f"{self.vars.alarm_messages[shield]} \n"
         return message_text
 
     def send_alarm_messages(self, text: str) -> bool:
