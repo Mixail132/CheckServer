@@ -87,4 +87,4 @@ if __name__ == "__main__":
 
     glue_scripts(output_file, files)
     format_scripts(output_file)
-    # build_exe_file(output_file)
+    build_exe_file(output_file)
