@@ -66,7 +66,6 @@ class MyViberBot:
                     vb_message = f"{recipients[user_id]} has left this chat."
                     byby_msg = TextMessage(text=vb_message)
                     self.viber.send_messages(self.admin, [byby_msg])
-                    del recipients, self.admin
                     continue
             sending_statuses.append(sending_status)
 

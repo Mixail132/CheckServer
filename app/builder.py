@@ -15,7 +15,9 @@ def glue_scripts(
         for script in input_scripts:
             with open(script, "r", encoding="utf-8") as lines:
                 for line in lines:
-                    if "app." in line or '"""' in line:
+                    if line.startswith('"""'):
+                        continue
+                    if "app." in line:
                         continue
                     if "FILE_VARS.is_file():" in line:
                         continue
