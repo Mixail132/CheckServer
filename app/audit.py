@@ -16,7 +16,9 @@ class AuditShields:
     def __init__(self, config_vars: Vars) -> None:
         self.vars: Vars = config_vars
         self.pinged_hosts: int = 0
-        self.power_off_shields: dict = {}
+        self.power_off_shields: dict = {
+            source: False for source in self.vars.hosts.keys()
+        }
         self.power_on_shields: dict = {
             source: False for source in self.vars.hosts.keys()
         }
@@ -72,23 +74,30 @@ class AuditShields:
         return is_host_out
 
     def check_shields(self, network: str) -> dict:
-        """Checks if a power shield is on."""
+        """
+        Checks if a power shield is on.
+        Defines whether a power is off or turned on.
+        """
 
         for shield, plant_ips in self.vars.hosts.items():
             if network in shield and "SOURCE" not in shield:
-
                 ping_results = [
                     self.ping_host(host) for host in plant_ips.values()
                 ]
                 self.pinged_hosts += len(ping_results)
-                previous_state = self.power_off_shields
-                if previous_state:
-                    previous_state = self.power_off_shields[shield]
-                self.power_off_shields.update({shield: all(ping_results)})
+                ping_result: bool = all(ping_results)
+
+                previous_state = self.power_off_shields[shield]
+                self.power_off_shields.update({shield: ping_result})
                 current_state = self.power_off_shields[shield]
 
-                if previous_state and [previous_state, current_state] == [False, True]:
-                    self.power_on_shields.update({shield: all(ping_results)})
+                states = [previous_state, current_state]
+
+                if states == [True, False]:
+                    self.power_on_shields.update({shield: True})
+
+                elif states == [False, True]:
+                    self.power_on_shields.update({shield: False})
 
         return self.power_off_shields
 
@@ -151,6 +160,7 @@ class AuditShields:
                 continue
             if not self.vars.alarm_sendings[shield]:
                 self.vars.alarm_sendings[shield] = True
+                self.vars.cancel_sendings[shield] = False
 
     def set_cancel_sending_status(self) -> None:
         """
@@ -163,3 +173,4 @@ class AuditShields:
                 continue
             if not self.vars.cancel_sendings[shield]:
                 self.vars.cancel_sendings[shield] = True
+                self.vars.alarm_sendings[shield] = False

@@ -8,7 +8,6 @@ all_vars = Vars(FILE_VARS)
 auditor = AuditShields(all_vars)
 
 
-m = iter(range(1, 100))
 while True:
 
     for net_ in all_vars.nets:
@@ -23,11 +22,3 @@ while True:
 
     auditor.send_messages(cancel)
     auditor.set_cancel_sending_status()
-
-    n = next(m)
-    print(n)
-    if n == 3:
-        for shield, hosts in all_vars.hosts.items():
-            if "INET" in shield:
-                for host in hosts.keys():
-                    hosts[host] = "www.google.com"
