@@ -157,7 +157,9 @@ def config_vars_set() -> Vars:
 def bad_hosts_vars(config_vars_set: Vars) -> Vars:
     """
     Returns the config variables object
-    where all the IP addresses will never be reached.
+    where all the IP addresses will never be reached,
+    and all 'in-touch' hosts will always be reached.
+    Reduces a number of hosts to minimize testing time.
     """
 
     all_vars = config_vars_set
@@ -174,6 +176,17 @@ def bad_hosts_vars(config_vars_set: Vars) -> Vars:
         for name in hosts.keys():
             if "IN_TOUCH" in name:
                 hosts[name] = always_available_host
+
+    reduced_hosts = {}
+    for source, hosts in all_vars.hosts.items():
+        hosts_number = 0
+        for name, host in hosts.items():
+            if hosts_number >= 1:
+                continue
+            reduced_hosts.update({source: {name: host}})
+            hosts_number += 1
+
+    all_vars.hosts = reduced_hosts
 
     viber_admin = {
         vb_user: vb_id
@@ -222,3 +235,20 @@ def config_file_as_a_text() -> str:
         config_file_text = "".join(config_file_list)
 
     return config_file_text
+
+
+@pytest.fixture
+def bad_hosts_vars_reduced(bad_hosts_vars: Vars) -> Vars:
+    """Reduces a number of hosts to minimize testing time."""
+    reduced_hosts = {}
+    for source, hosts in bad_hosts_vars.hosts.items():
+        hosts_number = 0
+        for name, host in hosts.items():
+            if hosts_number >= 1:
+                continue
+            reduced_hosts.update({source: {name: host}})
+            hosts_number += 1
+
+    bad_hosts_vars.hosts = reduced_hosts
+
+    return bad_hosts_vars
