@@ -17,10 +17,14 @@ class AuditShields:
         self.vars: Vars = config_vars
         self.pinged_hosts: int = 0
         self.power_off_shields: dict = {
-            source: False for source in self.vars.hosts.keys()
+            source: False
+            for source in self.vars.hosts.keys()
+            if "SOURCE" not in source
         }
         self.power_on_shields: dict = {
-            source: False for source in self.vars.hosts.keys()
+            source: False
+            for source in self.vars.hosts.keys()
+            if "SOURCE" not in source
         }
         self.messages_sent: dict = {}
         self.telegram_sender = MyTelegramBot(self.vars)
@@ -78,9 +82,11 @@ class AuditShields:
         Checks if a power shield is on.
         Defines whether a power is off or turned on.
         """
-
         for shield, plant_ips in self.vars.hosts.items():
-            if network in shield and "SOURCE" not in shield:
+            if "SOURCE" in shield:
+                continue
+
+            if network in shield:
                 ping_results = [
                     self.ping_host(host) for host in plant_ips.values()
                 ]
