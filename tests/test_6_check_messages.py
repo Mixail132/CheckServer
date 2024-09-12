@@ -12,15 +12,18 @@ def test_alarm_message_is_full(config_vars_set: Vars) -> None:
     """
     auditor = AuditShields(config_vars_set)
 
+    alarm_message = auditor.form_alarm_message()
+    assert not alarm_message
+
     auditor.power_off_shields = {
         source: True for source in config_vars_set.hosts.keys()
     }
 
-    result_message = auditor.form_alarm_message()
-    assert result_message
+    alarm_message = auditor.form_alarm_message()
+    assert alarm_message
 
     for shield in config_vars_set.hosts.keys():
-        assert config_vars_set.alarm_messages[shield] in result_message
+        assert config_vars_set.alarm_messages[shield] in alarm_message
 
 
 def test_cancel_message_is_full(config_vars_set: Vars) -> None:
@@ -31,12 +34,15 @@ def test_cancel_message_is_full(config_vars_set: Vars) -> None:
     """
     auditor = AuditShields(config_vars_set)
 
+    cancel_message = auditor.form_cancel_message()
+    assert not cancel_message
+
     auditor.power_on_shields = {
         source: True for source in config_vars_set.hosts.keys()
     }
 
-    result_message = auditor.form_cancel_message()
-    assert result_message
+    cancel_message = auditor.form_cancel_message()
+    assert cancel_message
 
     for shield in config_vars_set.hosts.keys():
-        assert config_vars_set.cancel_messages[shield] in result_message
+        assert config_vars_set.cancel_messages[shield] in cancel_message
