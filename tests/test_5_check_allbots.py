@@ -26,7 +26,7 @@ def test_one_of_bots_in_use(
 
 
 @pytest.mark.skipif(
-    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied to ping from GitHub"
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied pinging from GitHub"
 )
 def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     """
@@ -86,30 +86,6 @@ def test_cancel_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     Checks the sent message doesn't send twice.
     """
     auditor = AuditShields(bad_hosts_vars)
-
-    for shield in bad_hosts_vars.hosts.keys():
-        auditor.power_off_shields.update({shield: True})
-
-    assert all(auditor.power_off_shields.values()) is True
-
-    alarm_message = auditor.form_alarm_message()
-    assert alarm_message
-
-    first_alarm_message = auditor.send_messages(alarm_message)
-    assert first_alarm_message is True
-
-    auditor.set_alarm_sending_status()
-
-    for shield in bad_hosts_vars.alarm_sendings.keys():
-        if "SOURCE" in shield:
-            continue
-        assert bad_hosts_vars.alarm_sendings[shield] is True
-
-    rematched_message = auditor.form_alarm_message()
-    assert not rematched_message
-
-    second_alarm_message = auditor.send_messages(rematched_message)
-    assert second_alarm_message is False
 
     for shield in bad_hosts_vars.hosts.keys():
         auditor.power_on_shields.update({shield: True})
