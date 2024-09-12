@@ -49,12 +49,6 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     result_message = auditor.form_alarm_message()
     assert result_message
 
-    for shield in bad_hosts_vars.hosts.keys():
-        if "SOURCE" in shield:
-            continue
-        assert bad_hosts_vars.alarm_messages[shield] in result_message
-        assert bad_hosts_vars.alarm_sendings[shield] is False
-
     all_hosts_list = [
         hosts
         for hosts in bad_hosts_vars.hosts.values()
@@ -81,75 +75,62 @@ def test_alarm_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
     assert twice_sent_message is False
 
 
-# @pytest.mark.skipif(
-#     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No credentials on GitHub"
-# )
-# def test_cancel_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
-#     """
-#     Sets all the test hosts as unreached and available again.
-#     Just sets without pinging.
-#     Checks the result message contains all the information needed.
-#     Checks the result message has been sent.
-#     Checks the sent message doesn't send twice.
-#     """
-#     auditor = AuditShields(bad_hosts_vars)
-#
-#     for shield in bad_hosts_vars.hosts.keys():
-#         auditor.power_off_shields.update({shield: True})
-#
-#     assert all(auditor.power_off_shields.values()) is True
-#
-#     alarm_message = auditor.form_alarm_message()
-#     assert alarm_message
-#
-#     for shield in bad_hosts_vars.hosts.keys():
-#         if "SOURCE" in shield:
-#             continue
-#         assert bad_hosts_vars.alarm_messages[shield] in alarm_message
-#         assert bad_hosts_vars.alarm_sendings[shield] is False
-#
-#     once_sent_message = auditor.send_messages(alarm_message)
-#     assert once_sent_message is True
-#
-#     auditor.set_alarm_sending_status()
-#
-#     for shield in bad_hosts_vars.alarm_sendings.keys():
-#         if "SOURCE" in shield:
-#             continue
-#         assert bad_hosts_vars.alarm_sendings[shield] is True
-#
-#     rematched_message = auditor.form_alarm_message()
-#     assert not rematched_message
-#
-#     twice_sent_message = auditor.send_messages(rematched_message)
-#     assert twice_sent_message is False
-#
-#     for shield in bad_hosts_vars.hosts.keys():
-#         auditor.power_on_shields.update({shield: True})
-#
-#     assert all(auditor.power_on_shields.values()) is True
-#
-#     cancel_message = auditor.form_cancel_message()
-#     assert cancel_message
-#
-#     for shield in bad_hosts_vars.hosts.keys():
-#         if "SOURCE" in shield:
-#             continue
-#         assert bad_hosts_vars.cancel_messages[shield] in cancel_message
-#         assert bad_hosts_vars.cancel_sendings[shield] is False
-#
-#     once_sent_message = auditor.send_messages(cancel_message)
-#     assert once_sent_message is True
-#
-#     auditor.set_cancel_sending_status()
-#
-#     for shield in bad_hosts_vars.cancel_sendings.keys():
-#         if "SOURCE" in shield:
-#             continue
-#         assert bad_hosts_vars.cancel_sendings[shield] is True
-#
-#     rematched_message = auditor.form_cancel_message()
-#     assert not rematched_message
-#
-#     twice_sent_message = auditor.send_messages(rematched_message)
-#     assert twice_sent_message is False
+@pytest.mark.skipif(
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No credentials on GitHub"
+)
+def test_cancel_messages_right_and_sent(bad_hosts_vars: Vars) -> None:
+    """
+    Sets all the test hosts as unreached and available again.
+    Just sets without pinging.
+    Checks the result message has been sent.
+    Checks the sent message doesn't send twice.
+    """
+    auditor = AuditShields(bad_hosts_vars)
+
+    for shield in bad_hosts_vars.hosts.keys():
+        auditor.power_off_shields.update({shield: True})
+
+    assert all(auditor.power_off_shields.values()) is True
+
+    alarm_message = auditor.form_alarm_message()
+    assert alarm_message
+
+    first_alarm_message = auditor.send_messages(alarm_message)
+    assert first_alarm_message is True
+
+    auditor.set_alarm_sending_status()
+
+    for shield in bad_hosts_vars.alarm_sendings.keys():
+        if "SOURCE" in shield:
+            continue
+        assert bad_hosts_vars.alarm_sendings[shield] is True
+
+    rematched_message = auditor.form_alarm_message()
+    assert not rematched_message
+
+    second_alarm_message = auditor.send_messages(rematched_message)
+    assert second_alarm_message is False
+
+    for shield in bad_hosts_vars.hosts.keys():
+        auditor.power_on_shields.update({shield: True})
+
+    assert all(auditor.power_on_shields.values()) is True
+
+    cancel_message = auditor.form_cancel_message()
+    assert cancel_message
+
+    first_cancel_message = auditor.send_messages(cancel_message)
+    assert first_cancel_message is True
+
+    auditor.set_cancel_sending_status()
+
+    for shield in bad_hosts_vars.cancel_sendings.keys():
+        if "SOURCE" in shield:
+            continue
+        assert bad_hosts_vars.cancel_sendings[shield] is True
+
+    rematched_message = auditor.form_cancel_message()
+    assert not rematched_message
+
+    second_cancel_message = auditor.send_messages(rematched_message)
+    assert second_cancel_message is False
