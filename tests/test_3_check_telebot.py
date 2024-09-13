@@ -19,7 +19,7 @@ def skip_condition() -> bool:
     return not bot_in_use
 
 
-@pytest.mark.skipif(skip_condition(), reason="The bot is not used")
+@pytest.mark.skipif(skip_condition(), reason="The bot is not used.")
 def test_telegram_bot_configs_exist(config_vars_set: Vars) -> None:
     """Checks whether all the Telegram bot config variables exist."""
 

@@ -52,7 +52,7 @@ def test_cancel_message_is_full(config_vars_set: Vars) -> None:
 
 
 @pytest.mark.skipif(
-    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied pinging from GitHub"
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied pinging from GitHub."
 )
 def test_emergency_message_sent(bad_hosts_vars: Vars) -> None:
     """
@@ -101,7 +101,7 @@ def test_emergency_message_sent(bad_hosts_vars: Vars) -> None:
 
 
 @pytest.mark.skipif(
-    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No credentials on GitHub"
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No secrets on GitHub."
 )
 def test_cancel_message_sent(bad_hosts_vars: Vars) -> None:
     """
