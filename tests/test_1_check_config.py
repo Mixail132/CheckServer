@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 import validators
 
-from app.dirs import DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR
+from app.dirs import DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR, DIR_APP
 from app.vars import Vars
 
 
@@ -159,3 +159,10 @@ def test_all_network_variables_are_completely_set(
             net_cancels = str(config_vars_set.cancel_messages.keys())
             assert f"{net} SOURCE" in net_cancels
             assert net_cancels.count(net) >= 2
+
+
+@pytest.mark.skipif(
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No secrets on GitHub.")
+def test_real_config_file_exists() -> None:
+    config_file_path = DIR_APP / "vars.ini"
+    assert config_file_path.is_file()
