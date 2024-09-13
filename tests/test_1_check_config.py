@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 import validators
 
-from app.dirs import DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR, DIR_APP
+from app.dirs import DIR_APP, DIR_ROOT, FILE_VARS, GITHUB_ROOTDIR
 from app.vars import Vars
 
 
@@ -162,7 +162,9 @@ def test_all_network_variables_are_completely_set(
 
 
 @pytest.mark.skipif(
-    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No secrets on GitHub.")
+    GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No secrets on GitHub."
+)
 def test_real_config_file_exists() -> None:
+    """Checks whether the configuration 'vars.ini' file exists."""
     config_file_path = DIR_APP / "vars.ini"
     assert config_file_path.is_file()
