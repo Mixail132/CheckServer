@@ -1,7 +1,9 @@
 """Performing the main logic of the app. """
 
+import datetime
 import subprocess
 import sys
+import time
 
 from app.telegram import MyTelegramBot
 from app.vars import Vars
@@ -154,6 +156,20 @@ class AuditShields:
                 return True
 
         return False
+
+    @staticmethod
+    def delay_sending():
+        """
+        Delays a message sendings
+        if the reason to send occurs from 23:00 to 06:00.
+        """
+        send_before = datetime.time(23, 00)
+        send_after = datetime.time(6, 00)
+        while True:
+            time_now = datetime.datetime.now().time()
+            if send_after < time_now < send_before:
+                break
+            time.sleep(60)
 
     def set_alarm_sending_status(self) -> bool:
         """

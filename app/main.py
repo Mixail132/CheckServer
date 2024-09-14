@@ -1,4 +1,4 @@
-"""Starting the app."""
+"""Starting and running the app."""
 
 from app.audit import AuditShields
 from app.dirs import FILE_VARS
@@ -17,8 +17,10 @@ while True:
     alert = auditor.form_alarm_message()
     cancel = auditor.form_cancel_message()
 
+    auditor.delay_sending()
     auditor.send_messages(alert)
     auditor.set_alarm_sending_status()
 
+    auditor.delay_sending()
     auditor.send_messages(cancel)
     auditor.set_cancel_sending_status()
