@@ -13,7 +13,10 @@ CREATE_NO_WINDOW: int = 134217728
 
 
 class AuditShields:
-    """Processes and keeps a state of the checked power shields."""
+    """
+    Processes and keeps a state
+    of the checked power shields.
+    """
 
     def __init__(self, config_vars: Vars) -> None:
         self.vars: Vars = config_vars
@@ -31,10 +34,14 @@ class AuditShields:
         self.messages_sent: dict = {}
         self.telegram_sender = MyTelegramBot(self.vars)
         self.viber_sender = MyViberBot(self.vars)
+        self.stop_delaying = False
 
     @staticmethod
     def ping_host(ip_address: str) -> bool:
-        """Pings a single host if it's up or out depending on a platform."""
+        """
+        Pings a single host if it's up
+        or out depending on a platform.
+        """
 
         command = [
             "ping",
@@ -73,7 +80,10 @@ class AuditShields:
         return True
 
     def is_network_out(self, network: str) -> bool:
-        """Checks an always working host to make sure its network works."""
+        """
+        Checks an always working host
+        to make sure its network works.
+        """
 
         checking_host_ip = self.vars.hosts[f"{network} SOURCE"]["IN_TOUCH"]
         is_host_out = self.ping_host(checking_host_ip)
@@ -110,7 +120,10 @@ class AuditShields:
         return self.power_off_shields
 
     def form_alarm_message(self) -> str:
-        """Composes an alarm message regarding the certain equipment alarm."""
+        """
+        Composes an alarm message
+        regarding the certain equipment alarm.
+        """
 
         message_text = ""
         for shield, status in self.power_off_shields.items():
@@ -123,7 +136,8 @@ class AuditShields:
     def form_cancel_message(self) -> str:
         """
         Composes a cancel message regarding
-        the certain equipment alarm restoring."""
+        the certain equipment alarm restoring.
+        """
 
         message_text = ""
         for shield, status in self.power_on_shields.items():
@@ -134,7 +148,10 @@ class AuditShields:
         return message_text
 
     def send_messages(self, text: str) -> bool:
-        """Sends the alarm message to proper Telegram and Viber users."""
+        """
+        Sends the alarm message
+        to proper Telegram and Viber users.
+        """
 
         if_any_bot = any([self.telegram_sender.set, self.viber_sender.set])
         messages_are_sent = []
@@ -157,18 +174,19 @@ class AuditShields:
 
         return False
 
-    @staticmethod
-    def delay_sending():
+    def delay_sending(self):
         """
         Delays a message sendings
         if the reason to send occurs from 23:00 to 06:00.
         """
-        send_before = datetime.time(23, 00)
         send_after = datetime.time(6, 00)
+        send_before = datetime.time(23, 00)
         while True:
             time_now = datetime.datetime.now().time()
             if send_after < time_now < send_before:
-                break
+                return True
+            if self.stop_delaying:
+                return False
             time.sleep(60)
 
     def set_alarm_sending_status(self) -> bool:
