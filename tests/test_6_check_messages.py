@@ -1,5 +1,8 @@
 """Checking the completeness of messages and their sending."""
 
+import datetime
+from concurrent.futures import ThreadPoolExecutor
+
 import pytest
 
 from app.audit import AuditShields
@@ -54,7 +57,7 @@ def test_cancel_message_is_full(config_vars_set: Vars) -> None:
 @pytest.mark.skipif(
     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="Denied pinging from GitHub."
 )
-def test_emergency_message_sent(bad_hosts_vars: Vars) -> None:
+def test_emergency_message_is_sent(bad_hosts_vars: Vars) -> None:
     """
     Checks all the test hosts are unreached.
     Checks the ping command number is equal the hosts number.
@@ -103,7 +106,7 @@ def test_emergency_message_sent(bad_hosts_vars: Vars) -> None:
 @pytest.mark.skipif(
     GITHUB_ROOTDIR in f"{DIR_ROOT}", reason="No secrets on GitHub."
 )
-def test_cancel_message_sent(bad_hosts_vars: Vars) -> None:
+def test_cancel_message_is_sent(bad_hosts_vars: Vars) -> None:
     """
     Sets all the test hosts status as if they are available again.
     Just setting without pinging.
@@ -136,3 +139,53 @@ def test_cancel_message_sent(bad_hosts_vars: Vars) -> None:
 
     second_cancel_message = auditor.send_messages(rematched_message)
     assert second_cancel_message is False
+
+
+def test_message_is_sent_only_during_the_day(bad_hosts_vars) -> None:
+    """
+    Checks that a message is sent
+    only between 06:00 and 23:00.
+    """
+
+    msg_text = "Testing. It's not a night now,"
+    auditor = AuditShields(bad_hosts_vars)
+
+    time_now = datetime.datetime.now().time()
+    send_after = datetime.time(6, 0)
+    send_before = datetime.time(23, 0)
+
+    if send_after < time_now < send_before:
+
+        message_is_not_delayed = auditor.delay_sending()
+        message_is_sent = auditor.send_messages(msg_text)
+
+        assert message_is_not_delayed
+        assert message_is_sent
+
+
+def test_sending_delay_works_fine_at_night(bad_hosts_vars) -> None:
+    """
+    Checks that a message is sent
+    only between 06:00 and 23:00
+    because of the delay is working.
+    """
+
+    auditor = AuditShields(bad_hosts_vars)
+
+    time_now = datetime.datetime.now().time()
+    send_after = datetime.time(6, 00)
+    send_before = datetime.time(23, 0)
+
+    if send_after > time_now > send_before:
+
+        with pytest.raises(TimeoutError) as err:
+            executor = ThreadPoolExecutor(max_workers=1)
+            future = executor.submit(auditor.delay_sending)
+            future.result(timeout=4)
+
+        assert isinstance(err, pytest.ExceptionInfo)
+
+        auditor.stop_delaying = True
+
+        message_is_delayed = auditor.delay_sending()
+        assert not message_is_delayed
