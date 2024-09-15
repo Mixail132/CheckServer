@@ -163,7 +163,7 @@ def test_message_is_sent_only_during_the_day(bad_hosts_vars) -> None:
         assert message_is_sent
 
 
-def test_sending_delay_works_fine_at_night(bad_hosts_vars):
+def test_sending_delay_works_fine_at_night(bad_hosts_vars) -> None:
     """
     Checks that a message is sent
     only between 06:00 and 23:00
