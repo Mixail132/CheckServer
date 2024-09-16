@@ -1,4 +1,5 @@
 """Checking the completeness of messages and their sending."""
+
 import concurrent.futures
 import datetime
 from concurrent.futures import ThreadPoolExecutor
