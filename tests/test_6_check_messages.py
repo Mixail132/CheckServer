@@ -2,7 +2,6 @@
 
 import concurrent.futures
 import datetime
-from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
@@ -180,7 +179,7 @@ def test_sending_delay_works_fine_at_night(bad_hosts_vars) -> None:
     if send_after > time_now or send_before < time_now:
 
         with pytest.raises(concurrent.futures.TimeoutError) as err:
-            executor = ThreadPoolExecutor(max_workers=1)
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
             future = executor.submit(auditor.delay_sending)
             future.result(timeout=4)
 
