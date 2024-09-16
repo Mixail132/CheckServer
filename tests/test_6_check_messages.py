@@ -174,7 +174,7 @@ def test_sending_delay_works_fine_at_night(bad_hosts_vars) -> None:
 
     time_now = datetime.datetime.now().time()
     send_after = datetime.time(6, 00)
-    send_before = datetime.time(23, 0)
+    send_before = datetime.time(23, 00)
 
     if send_after > time_now or send_before < time_now:
 
