@@ -4,15 +4,23 @@ If not, an alarm occurs, and the power supply breaker is turned off.\
 Then, the app sends the alarm message to specific Telegram and Viber users.
 
 # Installation
-1. Git clone the project.
-2. Create a virtual environment.
-3. Install the project's requirements.
-4. Save the ```example_vars.ini``` file as ```vars.ini```.
-5. Fill the ```vars.ini``` file with your data.
-6. Make sure you have set up at least one ```Telegram``` or ```Viber``` bot.
-7. If you haven't, create your ```Viber``` or ```Telegram``` bot.
-8. Run the tests.
-9. Run ```CheckServer.exe```
+- Git clone the project:\
+```PS ... > git clone https://github.com/Mixail132/CheckServer.git```
+- Create a virtual environment:\
+```PS ... > python -m venv .venv```
+- Activate the virtual environment:\
+```PS ... > cd .venv/scripts/activate.bat```
+- Install the project requirements:\
+```(.venv) PS ... > pip install -r requirements.txt```
+- Save the ```example_vars.ini``` file as ```vars.ini```:\
+```(.venv) PS ... > cd app ; copy example_vars.ini vars.ini```
+- Fill the ```vars.ini``` file with your data.
+- Make sure you have set up at least one ```Telegram``` or ```Viber``` bot.
+- If you haven't, create your ```Viber``` or ```Telegram``` bot.
+- Run the tests:\
+```(.venv) PS ... > python -m pytest -с .github\settings\pytest.ini```
+- Run the script:
+``` PS ... > CheckServer.exe```
 
 # Folders
 - .github - ```GitHub``` actions and linters settings;
@@ -22,7 +30,7 @@ Then, the app sends the alarm message to specific Telegram and Viber users.
 -  static - images and media files;
 -  tests  - the project's tests.
 
-# Filess
+# Files
 - app/audit.py - the project's main actions
 - app/builder.py - the ```CheckServer.exe``` file builder;
 - app/CheckServer.exe - tha main output executable project's file;
