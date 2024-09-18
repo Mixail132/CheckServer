@@ -176,7 +176,7 @@ class AuditShields:
 
     def delay_sending(self):
         """
-        Delays a message sendings
+        Delays a message sending
         if the reason to send occurs from 23:00 to 06:00.
         """
         send_after = datetime.time(6, 00)
