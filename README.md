@@ -1,8 +1,9 @@
 # About
-The project's app checks a series of web servers to ensure they are up.\
-If not, an alarm occurs, and the power supply breaker is turned off.\
+The project's app pings web hosts to ensure they are up.\
+If not, an alarm occurs, and the power network is off.\
 Then, the app sends the alarm message to specific Telegram and Viber users.
 
+![graphic_description.png](static/graphic_description.png)
 # Installation
 - Git clone the project:\
 ```PS ... > git clone https://github.com/Mixail132/CheckServer.git```
