@@ -138,7 +138,7 @@ def test_all_network_variables_are_completely_set(
     are completely set in the configuration file.
     """
 
-    project_nets = ["WIFI", "DLAN", "INET"]
+    project_nets = ["WIFI", "DLAN", "IVPN"]
     user_nets: list = config_vars_set.nets
 
     for net in project_nets:

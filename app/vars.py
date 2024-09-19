@@ -23,7 +23,7 @@ class Vars:
         configs.read(config_file, "utf-8")
 
         headers = configs.sections()
-        nets = ["WIFI", "DLAN", "INET"]
+        nets = ["WIFI", "DLAN", "IVPN"]
         sources = []
 
         for net in nets:
