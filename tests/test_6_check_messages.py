@@ -46,3 +46,32 @@ def test_cancel_message_is_full(config_vars_set: Vars) -> None:
 
     for shield in config_vars_set.hosts.keys():
         assert config_vars_set.cancel_messages[shield] in cancel_message
+
+
+def test_messages_can_be_formed_in_a_cycle(bad_hosts_vars: Vars) -> None:
+    """
+    Checks the ability to form an alarm message
+    if the crash occurs again after recovery.
+    """
+
+    auditor = AuditShields(bad_hosts_vars)
+
+    true_statuses = {
+        shield: True for shield in auditor.power_off_shields.keys()
+    }
+
+    false_statuses = {
+        shield: False for shield in auditor.power_off_shields.keys()
+    }
+
+    for _ in range(3):
+
+        auditor.power_off_shields = false_statuses
+        assert not auditor.form_alarm_message()
+        auditor.power_off_shields = true_statuses
+        assert auditor.form_alarm_message()
+
+        auditor.power_on_shields = false_statuses
+        assert not auditor.form_cancel_message()
+        auditor.power_on_shields = true_statuses
+        assert auditor.form_cancel_message()
