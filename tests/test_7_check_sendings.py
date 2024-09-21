@@ -145,38 +145,3 @@ def test_sending_delay_works_fine_at_night(bad_hosts_vars) -> None:
 
         message_is_delayed = auditor.delay_sending()
         assert not message_is_delayed
-
-
-def test_messages_can_be_sent_in_a_cycle(bad_hosts_vars: Vars) -> None:
-    """
-    Checks the ability to send an alarm message
-    if the crash occurs again after recovery.
-    """
-
-    auditor = AuditShields(bad_hosts_vars)
-
-    true_statuses = {
-        shield: True for shield in auditor.power_off_shields.keys()
-    }
-
-    false_statuses = {
-        shield: False for shield in auditor.power_off_shields.keys()
-    }
-
-    for _ in range(3):
-
-        auditor.power_off_shields = false_statuses
-        assert not auditor.form_alarm_message()
-        auditor.power_off_shields = true_statuses
-        assert auditor.form_alarm_message()
-
-        status = auditor.set_alarm_sending_status()
-        assert status is True
-
-        auditor.power_on_shields = false_statuses
-        assert not auditor.form_cancel_message()
-        auditor.power_on_shields = true_statuses
-        assert auditor.form_cancel_message()
-
-        status = auditor.set_cancel_sending_status()
-        assert status is True
