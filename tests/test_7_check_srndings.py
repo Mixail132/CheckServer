@@ -155,22 +155,28 @@ def test_messages_can_be_sent_in_a_cycle(bad_hosts_vars: Vars) -> None:
 
     auditor = AuditShields(bad_hosts_vars)
 
-    assert not auditor.form_alarm_message()
+    true_statuses = {
+        shield: True for shield in auditor.power_off_shields.keys()
+    }
 
-    true_statuses = {shield: True for shield in auditor.power_off_shields.keys()}
-    auditor.power_off_shields = true_statuses
+    false_statuses = {
+        shield: False for shield in auditor.power_off_shields.keys()
+    }
 
-    assert auditor.form_alarm_message()
+    for _ in range(3):
 
-    status = auditor.set_alarm_sending_status()
-    assert status is True
-    status = auditor.set_cancel_sending_status()
-    assert status is False
+        auditor.power_off_shields = false_statuses
+        assert not auditor.form_alarm_message()
+        auditor.power_off_shields = true_statuses
+        assert auditor.form_alarm_message()
 
-    true_statuses = {status: True for status in auditor.power_on_shields.keys()}
-    auditor.power_on_shields = true_statuses
+        status = auditor.set_alarm_sending_status()
+        assert status is True
 
-    assert auditor.form_cancel_message()
+        auditor.power_on_shields = false_statuses
+        assert not auditor.form_cancel_message()
+        auditor.power_on_shields = true_statuses
+        assert auditor.form_cancel_message()
 
-    status = auditor.set_cancel_sending_status()
-    assert status is True
+        status = auditor.set_cancel_sending_status()
+        assert status is True
