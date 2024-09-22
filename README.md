@@ -50,7 +50,7 @@ Then, the app sends an alarm message to specific Telegram and Viber users.
 - app / dirs.py - the relative path's to the project's folders;
 - app / main.py - the project's main logic handler;
 - app / telegram.py - ```Telegram``` bot logic and settings;
-- app / viber.py  - ``Viner`` bot logic and settings;
+- app / viber.py  - ``Viber`` bot logic and settings;
 - app / vars.py - the project's configuration file reading;
 - static / ico.ico - the ```CheckServer.exe``` icon;
 - requirements.txt - the project's Python modules.
