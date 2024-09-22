@@ -10,7 +10,8 @@ Then, the app sends an alarm message to specific Telegram and Viber users.
 2. Create a virtual environment:
    - ```python -m venv .venv```
 3. Activate the virtual environment:
-   - ```cd .venv/scripts/activate.bat```
+   - ```cd .venv/scripts```
+   - ```activate.bat```
 4. Install the project requirements:
    - ```pip install -r requirements.txt```
 5. Save the ```example_vars.ini``` file as ```vars.ini```:
