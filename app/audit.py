@@ -204,10 +204,10 @@ class AuditShields:
         statuses_have_been_changed = False
 
         if cancel:
-            shields = self.power_off_shields
+            shields = self.power_on_shields
             sendings = self.vars.cancel_sendings
         else:
-            shields = self.power_on_shields
+            shields = self.power_off_shields
             sendings = self.vars.alarm_sendings
 
         for shield, status in shields.items():
