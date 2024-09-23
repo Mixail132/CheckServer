@@ -68,16 +68,18 @@ def test_messages_can_be_formed_in_a_cycle(bad_hosts_vars: Vars) -> None:
 
         auditor.power_off_shields = false_statuses
         assert not auditor.form_alarm_message()
+
         auditor.power_off_shields = true_statuses
         assert auditor.form_alarm_message()
 
-        status = auditor.set_alarm_sending_status()
+        status = auditor.set_sending_status(alarm=True)
         assert status is True
 
         auditor.power_on_shields = false_statuses
         assert not auditor.form_cancel_message()
+
         auditor.power_on_shields = true_statuses
         assert auditor.form_cancel_message()
 
-        status = auditor.set_cancel_sending_status()
+        status = auditor.set_sending_status(cancel=True)
         assert status is True

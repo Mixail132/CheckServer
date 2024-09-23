@@ -44,7 +44,7 @@ def test_emergency_message_is_sent(bad_hosts_vars: Vars) -> None:
     first_alarm_message = auditor.send_messages(alarm_message)
     assert first_alarm_message is True
 
-    status = auditor.set_alarm_sending_status()
+    status = auditor.set_sending_status(alarm=True)
     assert status is True
 
     for shield in bad_hosts_vars.alarm_sendings.keys():
@@ -82,7 +82,7 @@ def test_cancel_message_is_sent(bad_hosts_vars: Vars) -> None:
     first_cancel_message = auditor.send_messages(cancel_message)
     assert first_cancel_message is True
 
-    status = auditor.set_cancel_sending_status()
+    status = auditor.set_sending_status(cancel=True)
     assert status is True
 
     for shield in bad_hosts_vars.cancel_sendings.keys():
