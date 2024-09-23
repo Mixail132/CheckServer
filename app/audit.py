@@ -189,36 +189,34 @@ class AuditShields:
                 return False
             time.sleep(60)
 
-    def set_alarm_sending_status(self) -> bool:
+    def set_sending_status(
+        self,
+        /,
+        alarm: bool = False,
+        cancel: bool = False,
+    ) -> bool:
         """
         Sets a sending status
-        if an alarm message is sent.
+        if any type of message is sent.
+        Means an alarm or a cancel message.
         """
 
         statuses_have_been_changed = False
-        for shield, status in self.power_off_shields.items():
+
+        if cancel:
+            shields = self.power_off_shields
+            sendings = self.vars.cancel_sendings
+        else:
+            shields = self.power_on_shields
+            sendings = self.vars.alarm_sendings
+
+        for shield, status in shields.items():
             if not status:
                 continue
-            if not self.vars.alarm_sendings[shield]:
-                self.vars.alarm_sendings[shield] = True
-                self.vars.cancel_sendings[shield] = False
-                statuses_have_been_changed = True
 
-        return statuses_have_been_changed
-
-    def set_cancel_sending_status(self) -> bool:
-        """
-        Sets a sending status
-        if a cancel message is sent.
-        """
-
-        statuses_have_been_changed = False
-        for shield, status in self.power_on_shields.items():
-            if not status:
-                continue
-            if not self.vars.cancel_sendings[shield]:
-                self.vars.cancel_sendings[shield] = True
-                self.vars.alarm_sendings[shield] = False
+            if not sendings[shield]:
+                self.vars.alarm_sendings[shield] = alarm
+                self.vars.cancel_sendings[shield] = cancel
                 statuses_have_been_changed = True
 
         return statuses_have_been_changed

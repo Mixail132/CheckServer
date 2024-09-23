@@ -19,8 +19,8 @@ while True:
 
     auditor.delay_sending()
     auditor.send_messages(alert)
-    auditor.set_alarm_sending_status()
+    auditor.set_sending_status(alarm=True)
 
     auditor.delay_sending()
     auditor.send_messages(cancel)
-    auditor.set_cancel_sending_status()
+    auditor.set_sending_status(cancel=True)
