@@ -1,7 +1,7 @@
 # About
 The project's app pings web hosts to ensure they are up.\
 If not, that means the power network is off.\
-Then, the app sends an alarm message to specific Telegram and Viber users.
+Then, the app sends an alarm message to specific ```Telegram``` and ```Viber``` users.
 
 ![graphic_description.png](static/graphic_description.png)
 # Installation
@@ -31,26 +31,24 @@ Then, the app sends an alarm message to specific Telegram and Viber users.
 12. Run the script:
     - ```CheckServer.exe```
 
-# Folders
+# Files & Folders
 - .github - ```GitHub``` actions and linters settings;
 - .temp   - linters and pytest cache files, build files;
 - .venv   - virtual environment components;
 -  app    - the project's application files;
+    - audit.py - the project's main actions
+    - builder.py - the ```CheckServer.exe``` file builder;
+    - CheckServer.exe - tha main output executable project's file;
+    - example_vars.ini - the project's configuration variables example;
+    - vars.ini - a user's configuration and secret variables;
+    - linter.py - the code checking with launching linters;
+    - your_viberbot_logo.jpg - the ```Viber``` bot logo file;
+    - dirs.py - the relative path's to the project's folders;
+    - main.py - the project's main logic handler;
+    - telegram.py - ```Telegram``` bot logic and settings;
+    - viber.py  - ``Viber`` bot logic and settings;
+    - vars.py - the project's configuration file reading;
 -  static - images and media files;
+    - ico.ico - the ```CheckServer.exe``` icon;
 -  tests  - the project's tests.
-
-# Files
-- app / audit.py - the project's main actions
-- app / builder.py - the ```CheckServer.exe``` file builder;
-- app / CheckServer.exe - tha main output executable project's file;
-- app / example_vars.ini - the project's configuration variables example;
-- app / vars.ini - a user's configuration and secret variables;
-- app / linter.py - the code checking with launching linters;
-- app / your_viberbot_logo.jpg - the ```Viber``` bot logo file;
-- app / dirs.py - the relative path's to the project's folders;
-- app / main.py - the project's main logic handler;
-- app / telegram.py - ```Telegram``` bot logic and settings;
-- app / viber.py  - ``Viber`` bot logic and settings;
-- app / vars.py - the project's configuration file reading;
-- static / ico.ico - the ```CheckServer.exe``` icon;
-- requirements.txt - the project's Python modules.
+-  requirements.txt - the project's Python modules.
